@@ -12,8 +12,8 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter {
       // Map default decorator. This shall be applied to all paths if no other paths match.
 
       builder.addDecoratorPath("/*", "/WEB-INF/jsp/decorators/decorator.jsp")
-            .addExcludedPath("/loginform");
-      builder.addTagRuleBundles(new DivExtractingTagRuleBundle());
+          .addExcludedPath("/loginform");
+      builder.addTagRuleBundles(new DivExtractingTagRuleBundle()); // 이거 뭔 말인지 모르겠음 ㅅㅂ
 
    }
 

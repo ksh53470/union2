@@ -27,16 +27,16 @@ public class AccountApplication {
 			FilterRegistrationBean<SiteMeshFilter> filter = new FilterRegistrationBean<SiteMeshFilter>();
 			filter.setFilter(new SiteMeshFilter());
 			return filter;
-		}
+		} // sitemesh를 사용하기 위해서 스프링 Bean에 등록하는 단계
 		@Bean
 		public ServletListenerRegistrationBean<HttpSessionListener> sessionListener() {
 			return new ServletListenerRegistrationBean<HttpSessionListener>(new SessionListener());
-		}
+		} // session을 사용하기 위해서 스프링 Bean에 등록하는 단계
 		@Bean(name = "multipartResolver")
 		public CommonsMultipartResolver multipartResolver() {
 		    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		    multipartResolver.setMaxUploadSize(100000);
 		    return multipartResolver;
-		}
+		} // 파일 업로드를 처리하기 위해서 스프링 Bean에 등록하는 단계
 
 }

@@ -1,38 +1,51 @@
 <%-- <%@page import="net.plang.howooaccount.system.authority.to.AuthorityEmpBean"%> --%>
-<%@page import="java.util.ArrayList"%>
+<%@ page import="java.util.ArrayList"%>  <!-- ArrayList 클래스를 사용하기 위한 import -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- JSTL을 사용하기 위해 커스텀 액션을 사용하겠다 라고 선언하는 것 -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <script
-            src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script> <!-- jquery를 사용하겠다 라고 선언하는 것  -->
+    <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script> <!-- aggrid를 사용하겠다 라고 선언하는 것 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> <!-- sweetalert를 사용하겠다 라고 선언하는 것, 아래 Swal.fire()메서드를 사용하기 위해서 필요함 -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">  <!-- IE브라우저에서 각 버전 중 가장 최신 표준 모드를 사용하겠다고 선언하는 것 -->
     <meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"> <!-- viewport는 웹 페이지의 크기를 결정한다고 합니다.
 
-    <title><sitemesh:write property='title'/> - 72th Accounting</title>
+    content에는 여러 값들이 있습니다.
+
+    width=device-width는 웹 페이지의 크기가 모니터가 스마트폰의 실제 액정 크기를 따라가도록 합니다.
+
+    initial-scale=1는 보여지는 화면의 zoom up 정도를 1배율로 한다는 것입니다. 이 값을 키우면 보여지는 화면이 줌 되어 크게 보입니다. 마치 스마트폰에서 작은 사진을 두 손가락을 이용해 확대시키는 것과 비슷합니다. 스마트폰에서만 효과가 있는 코드 같습니다.
+
+    shrink-to-fit=no는 애플의 safari(사파리) 브라우저에만 영향을 미치는 속성 같습니다. 그 중에서도 사파리 11 이전의 버전과 관련된 것 같습니다. 사파리는 기본적으로 viewport의 크기보다 보여줘야할 내용이 크면, 보여줘야할 내용을 줄여서라 보여준다고 하네요. 그것을 방지하기 위해 이 코드를 쓴다고 합니다. -->
+
+    <meta name="description" content=""> <!-- 웹 페이지에 대한 설명을 정의하는 예제 -->
+    <meta name="author" content=""> <!-- 웹 페이지에 대한 저자를 정의하는 예제 -->
+
+    <title><sitemesh:write property='title'/> - 72th Accounting</title>  <!-- url 요청한 페이지의 title 내용을 가져와서 쓰겠다고 선언하는 것 -->
 
     <!-- Custom fonts for this template-->
     <link
             href="${pageContext.request.contextPath}/assets/vendor/fontawesome-free/css/all.min.css"
             rel="stylesheet" type="text/css">
+
+    <!-- link 태그는 현재 문서와 외부 리소스의 관계를 나타냄, 보통 스타일 시트를 연결할 때 많이 사용함
+    하지만 사이트 아이콘 연결 등 여러가지로 쓰일 수 있음
+    여기선 css들을 다 한곳에 정리해둠, 그리고 들고와서 class로 추가해 사용하는 형식임-->
+
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template , 100퍼 폰트 관련인듯???? 찾아봐도 잘 모르겠음-->
     <link
             href="${pageContext.request.contextPath}/assets/css/sb-admin-2.min.css"
             rel="stylesheet">
-    <sitemesh:write property='head' />
+    <sitemesh:write property='head' /> <!-- url 요청한 페이지의 head 내용을 가져와서 쓰겠다고 선언하는 것 -->
 </head>
 
 <body id="page-top">
