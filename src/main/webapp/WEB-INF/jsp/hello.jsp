@@ -170,10 +170,8 @@
 
 
 		</div>
-		<div style="float: center; width: 100%; padding: 10px;"></div>
-
-		<div id="openGrid" class="ag-theme-balham"
-			 style="height: 150px; width: auto;"></div>
+	</div>
+</div>
 </body>
 
 </html>
