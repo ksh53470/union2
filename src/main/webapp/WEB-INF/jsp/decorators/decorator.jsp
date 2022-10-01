@@ -26,7 +26,7 @@
     <meta name="description" content=""> <!-- 웹 페이지에 대한 설명을 정의하는 예제 -->
     <meta name="author" content=""> <!-- 웹 페이지에 대한 저자를 정의하는 예제 -->
 
-    <title><sitemesh:write property='title'/> - 72th Accounting</title>  <!-- url 요청한 페이지의 title 내용을 가져와서 쓰겠다고 선언하는 것 -->
+    <title><sitemesh:write property='title'/> - 73th Accounting</title>  <!-- url 요청한 페이지의 title 내용을 가져와서 쓰겠다고 선언하는 것 -->
 
     <!-- Custom fonts for this template-->
     <link
@@ -45,54 +45,56 @@
     <link
             href="${pageContext.request.contextPath}/assets/css/sb-admin-2.min.css"
             rel="stylesheet">
-    <sitemesh:write property='head' /> <!-- url 요청한 페이지의 head 내용을 가져와서 쓰겠다고 선언하는 것 -->
+    <sitemesh:write property='head' /> <!-- url 요청한 페이지의 head 내용을 가져와서 쓰겠다고 선언하는 것, head에 있는 내용 다 가져다 쓸 수 있는듯, 확인해보자, 어떻게? -->
 </head>
 
-<body id="page-top">
+<body id="page-top"> <!-- body에 id값 줌 -->
 <!-- Page Wrapper -->
-<div id="wrapper">
+<div id="wrapper">  <!-- div 태그는 divison의 약자로, 보통 레이아웃을 나누는데 쓴다. 특별한 기능을 가지고 있지는 않다. -->
 
-    <ul
-            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-            id="accordionSidebar">
+    <!-- Sidebar 시작-->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar">
+        <!-- ul 태그는 순서가 없는 list를 정의할 때 사용, 각 아이템은 li태그를 사용해서 나타낼 수 있음 -->
 
-        <!-- Sidebar - Brand -->
+        <!-- Sidebar -brand-->
+        <!-- 73기 브랜드를 누르는 순간 hello.jsp로 가도록 href를 걸어둠 -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/hello">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
             <div class="sidebar-brand-text mx-3">
-                72th Accounting<sup>2</sup>
+                73th Accounting<sup>3</sup>
             </div>
         </a>
 
         <!-- Divider -->
+        <!-- hr 태그로 수평선을 그었음, 사이드바에 구분선을 만듬 -->
         <hr class="sidebar-divider my-0">
 
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active"><a class="nav-link collapsed"
-                                       href="#" data-toggle="collapse" data-target="#collapseDashboard"
-                                       aria-expanded="true" aria-controls="collapseTwo"> <i
-                class="fas fa-fw fa-folder"></i> <span class="confirmMenu">게시판</span>
-        </a>
+        <!-- 다른 목록들과는 다른 css 설정이 되어있음, 어떻게 똑같이 만들지 확인해보자 -->
+        <li class="nav-item active">
+            <a class="nav-link collapsed Permission" href="#" data-toggle="collapse"
+               data-target="#collapseDashboard" aria-expanded="true" aria-controls="collapseTwo">
+                <!-- data-toggle="collapse" 클래스 스타일은 정보를 안보이도록 접었다가 클릭하면 펼쳐져서 보이게 하는 기능, 숨기기 동작이 있다.
+                    그런 다음 data-target으로 버튼을 접을 콘텐츠, 예를 들면 div 태그등을 만들어서 연결하면 된다.-->
+                    <i class="fas fa-fw fa-folder"></i>  <!-- i 태그는 글자를 기울여서 표시하는 태그 -->
+                    <span class="confirmMenu">게시판</span> <!-- 특별한 기능은 없음, 다만 div태그와 다르게 줄바꿈이 되지 않음 -->
+            </a>
+            <!-- 위에 collapse로 연결한 div 태그 -->
             <div id="collapseDashboard" class="collapse"
                  aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">게시판</h6>
                     <!--작은이름 -->
-                    <a id="ME009_1" class="collapse-item board" href="#">게시판 보기</a>
+                    <a id="ME009_1" class="collapse-item board" href="#">게시판 보기</a> <!-- collapse-item의 클래스 이름으로 함수 걸려있음. 누르면 db에서 url주소 가져와서 sendredirect로 url주소 강제로 바꿔줌 -->
                     <!--http://localhost:8282/Account33/+html 하이퍼링크 -->
-                    <a id="ME009_2" class="collapse-item boardwrite" href="#">게시글
-                        쓰기</a>
+                    <a id="ME009_2" class="collapse-item boardwrite" href="#">게시글 쓰기</a> <!-- id값을 파라매터로 넘겨서 url주소를 찾는데 사용함 -->
                 </div>
-            </div></li>
-        <!-- Nav Item - Dashboard -->
-        <%--    <li class="nav-item active">
-    <a class="nav-link Permission" href="${pageContext.request.contextPath}/base/board"><!-- 만들어야함!! -->
-      <i class="fas fa-fw fa-table"></i>
-      <span>게시판</span></a>
-  </li> --%>
+            </div>
+        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -151,12 +153,11 @@
                  aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a id="ME004_1" class="collapse-item totaltrial" href="#">합계잔액시산표</a>
-                    <!-- <a class="collapse-item" href="${pageContext.request.contextPath}/statement/totalTrialBalance.html">합계잔액시산표</a>  -->
                     <a id="ME004_2" class="collapse-item income" href="#">손익계산서</a>
-                    <!--  <a class="collapse-item" href="${pageContext.request.contextPath}/statement/financialPosition.html">재무상태표</a> -->
                     <a id="ME004_3" class="collapse-item finance" href="#">재무상태표</a>
                 </div>
-            </div></li>
+            </div>
+        </li>
 
 
         <!--전기분재무제표 -->
@@ -206,15 +207,15 @@
                     <a id="ME006_2" class="collapse-item PlanBudget" href="#">예산편성</a>
                     <a id="ME006_3" class="collapse-item ManageBudget" href="#">예산대비실적현황</a>
                 </div>
-            </div></li>
-
+            </div>
+        </li>
 
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <c:if test="${sessionScope.empName!=null}">
+        <c:if test="${sessionScope.empName!=null}">  <!-- 조건에 따라 분기를 처리할 수 있는 태그, 속성내의 값이 참이면 실행된다 -->
             <li class="nav-item"><a class="nav-link collapsed" href="#"
                                     data-toggle="collapse" data-target="#collapsePages"
                                     aria-expanded="true" aria-controls="collapsePages"> <i
@@ -224,18 +225,16 @@
                      aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">설정</h6>
-                        <a id="ME002_5" class="collapse-item profile" href="#">내프로필</a> <a
-                            id="ME002_1" class="collapse-item manageWorker" href="#">사원관리</a>
+                        <a id="ME002_5" class="collapse-item profile" href="#">내프로필</a>
+                        <a id="ME002_1" class="collapse-item manageWorker" href="#">사원관리</a>
                         <a id="ME002_2" class="collapse-item registerWorkplace" href="#">회사등록</a>
-                        <a id="ME002_3" class="collapse-item registerCustomer" href="#">거래처
-                            관리</a> <a id="ME002_4" class="collapse-item registerExport" href="#">계정과목
-                        및 적요</a>
+                        <a id="ME002_3" class="collapse-item registerCustomer" href="#">거래처 관리</a>
+                        <a id="ME002_4" class="collapse-item registerExport" href="#">계정과목 및 적요</a>
                     </div>
-                </div></li>
+                </div>
+            </li>
             <hr class="sidebar-divider d-none d-md-block">
         </c:if>
-        <!-- Divider -->
-
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
@@ -245,6 +244,8 @@
     </ul>
     <!-- End of Sidebar -->
 
+    <%----------------------------------------------------------------------------------------------------------%>
+
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -252,18 +253,10 @@
         <div id="content">
 
             <!-- Topbar -->
-            <nav
-                    class="navbar navbar-expand navbar-light bg-secondary topbar mb-4 static-top shadow">
+            <nav class="navbar navbar-expand navbar-light bg-secondary topbar mb-4 static-top shadow">
 
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop"
-                        class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
-
-                <!-- Topbar Search -->
-                <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <!-- Topbar Search --> <!-- 기능구현 안되어있음 -->
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small"
                                placeholder="Search for..." aria-label="Search"
@@ -277,256 +270,144 @@
                 </form>
 
                 <!-- Topbar Navbar -->
-                <nav
-                        class="navbar navbar-expand-sm navbar-dark d-flex justify-content-center align-items-center">
+                <nav class="navbar navbar-expand-sm navbar-dark d-flex justify-content-center align-items-center">
                     <ul class="navbar-nav navbar-dark style='cursor:pointer'; ">
 
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">전표입력</a>
+                        <!-- 상단 바 전표입력 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">전표입력</a>
                             <div class="dropdown-menu">
-
-                                <a id="ME001_1" class="dropdown-item slip" href="#">일반전표</a> <a
-                                    id="ME001_2" class="dropdown-item approveslip" href="#">전표승인</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">장부관리</a>
+                                <a id="ME001_1" class="dropdown-item slip" href="#">일반전표</a>
+                                <a id="ME001_2" class="dropdown-item approveslip" href="#">전표승인</a>
+                            </div>
+                        </li>
+                        <!-- 상단 바 장부관리 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">장부관리</a>
                             <div class="dropdown-menu">
                                 <a id="ME003_1" class="dropdown-item cashJournal" href="#">현금출납장</a>
                                 <a id="ME003_4" class="dropdown-item assetManagement" href="#">자산관리대장</a>
                                 <a id="ME003_2" class="dropdown-item journalForm" href="#">분개장</a>
-                                <a id="ME003_3" class="dropdown-item detailTrialBalance"
-                                   href="#">일(월)계표</a> <a id="ME003_11"
-                                                          class="dropdown-item accountLedger" href="#">계정별원장</a> <a
-                                    id="ME003_12" class="dropdown-item totalAccountLedger"
-                                    href="#">총계정원장</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">결산 및 재무제표</a>
+                                <a id="ME003_3" class="dropdown-item detailTrialBalance" href="#">일(월)계표</a>
+                                <a id="ME003_11" class="dropdown-item accountLedger" href="#">계정별원장</a>
+                                <a id="ME003_12" class="dropdown-item totalAccountLedger" href="#">총계정원장</a>
+                            </div>
+                        </li>
+                        <!-- 상단 바 결산 및 재무제표 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">결산 및 재무제표</a>
                             <div class="dropdown-menu">
                                 <a id="ME004_1" class="dropdown-item totaltrial" href="#">합계잔액시산표</a>
                                 <a id="ME004_2" class="dropdown-item income" href="#">손익계산서</a>
                                 <a id="ME004_3" class="dropdown-item finance" href="#">재무상태표</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">전기분재무제표</a>
+                            </div>
+                        </li>
+                        <!-- 상단 바 전기분재무제표 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">전기분재무제표</a>
                             <div class="dropdown-menu">
                                 <a id="ME005_1" class="dropdown-item earlyCal" href="#">전기분손익계산서</a>
                                 <a id="ME005_2" class="dropdown-item earlyFinance" href="#">전기분재무상태표</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">권한관리</a>
+                            </div>
+                        </li>
+                        <!-- 권한관리 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">권한관리</a>
                             <div class="dropdown-menu">
                                 <a id="ME007_1" class="dropdown-item authorityGroup" href="#">권한그룹설정</a>
                                 <a id="ME007_2" class="dropdown-item menuAuthority" href="#">메뉴권한설정</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white Permission"
-                                data-toggle="dropdown" href="#">예산관리</a>
+                            </div>
+                        </li>
+                        <!-- 예산관리 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white Permission"
+                               data-toggle="dropdown" href="#">예산관리</a>
                             <div class="dropdown-menu">
                                 <a id="ME006_1" class="dropdown-item ApplyBudget" href="#">예산신청</a>
                                 <a id="ME006_2" class="dropdown-item PlanBudget" href="#">예산편성</a>
                                 <a id="ME006_3" class="dropdown-item ManageBudget" href="#">예산대비실적현황</a>
-                            </div></li>
-
-                        <li class="nav-item dropdown"><a
-                                class="nav-link dropdown-toggle text-white"
-                                data-toggle="dropdown" href="#">기본설정</a>
+                            </div>
+                        </li>
+                        <!-- 기본설정 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white"
+                               data-toggle="dropdown" href="#">기본설정</a>
                             <div class="dropdown-menu">
-                                <a id="ME002_5" class="dropdown-item profile" href="#">내
-                                    프로필</a> <a id="ME002_1" class="dropdown-item manageWorker"
-                                               href="#">사원관리</a> <a id="ME002_2"
-                                                                    class="dropdown-item registerWorkplace" href="#">회사등록</a> <a
-                                    id="ME002_3" class="dropdown-item registerCustomer" href="#">거래처
-                                관리</a> <a id="ME002_4" class="dropdown-item registerExport"
-                                          href="#">계정과목 및 적요</a>
-
-                            </div></li>
+                                <a id="ME002_5" class="dropdown-item profile" href="#">내 프로필</a>
+                                <a id="ME002_1" class="dropdown-item manageWorker" href="#">사원관리</a>
+                                <a id="ME002_2" class="dropdown-item registerWorkplace" href="#">회사등록</a>
+                                <a id="ME002_3" class="dropdown-item registerCustomer" href="#">거래처 관리</a>
+                                <a id="ME002_4" class="dropdown-item registerExport" href="#">계정과목 및 적요</a>
+                            </div>
+                        </li>
+                        <c:if test="${sessionScope.empName!=null}">
+                            <!-- Nav Item - Messages -->
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a class="nav-link dropdown-toggle text-white Permission"
+                                   href="${pageContext.request.contextPath}/base/email"
+                                   id="messagesDropdown" role="button" aria-haspopup="true"
+                                   aria-expanded="false">이메일전송
+                                    <i class="fas fa-envelope fa-fw"></i>
+                                    <!-- Counter - Messages -->
+                                    <span class="badge badge-danger badge-counter"></span> <!-- 메세지 갯수가 날아와야함   -->
+                                </a>
+                            </li>
+                            <div class="topbar-divider d-none d-sm-block"></div>
+                        </c:if>
                     </ul>
                 </nav>
-
                 <ul class="navbar-nav ml-auto">
-                    <c:if test="${sessionScope.empName!=null}">
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none"><a
-                                class="nav-link dropdown-toggle" href="#" id="searchDropdown"
-                                role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false"> <i class="fas fa-search fa-fw"></i>
-                        </a> <!-- Dropdown - Messages -->
-                            <div
-                                    class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                    aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text"
-                                               class="form-control bg-light border-0 small"
-                                               placeholder="Search for..." aria-label="Search"
-                                               aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div></li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1"><a
-                                class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
-                                role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false"> <i class="fas fa-bell fa-fw"></i> <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter"></span> <!-- 알림 갯수가 날아와야함 -->
-                        </a> <!-- Dropdown - Alerts --> <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                  Alerts Center
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for your account.
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-              </div> --></li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1"><a
-                                class="nav-link dropdown-toggle"
-                                href="${pageContext.request.contextPath}/base/email"
-                                id="messagesDropdown" role="button" aria-haspopup="true"
-                                aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i>
-                            <!-- Counter - Messages --> <span
-                                    class="badge badge-danger badge-counter"></span> <!-- 메세지 갯수가 날아와야함   -->
-                        </a> <!-- Dropdown - Messages --> <!-- <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
-                <h6 class="dropdown-header">
-                  Message Center
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
-                    <div class="status-indicator bg-success"></div>
-                  </div>
-                  <div class="font-weight-bold">
-                    <div class="text-truncate">Hi there! I am wondering if you can help me with a problem I've been having.</div>
-                    <div class="small text-gray-500">Emily Fowler · 58m</div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60" alt="">
-                    <div class="status-indicator"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">I have the photos that you ordered last month, how would you like them sent to you?</div>
-                    <div class="small text-gray-500">Jae Chun · 1d</div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60" alt="">
-                    <div class="status-indicator bg-warning"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">Last month's report looks great, I am very happy with the progress so far, keep up the good work!</div>
-                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
-                    <div class="status-indicator bg-success"></div>
-                  </div>
-                  <div>
-                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone told me that people say this to all dogs, even if they aren't good...</div>
-                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="${pageContext.request.contextPath}/base/email">Read More Messages</a>
-              </div> --></li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-                    </c:if>
                     <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow"><c:choose>
+                    <li class="nav-item dropdown no-arrow">
+                        <!-- 조건에 따라 여러곳으로 분기가능, 조건이 맞은것이 없으면 기본 분기 제공 가능, when, otherwise -->
+                        <c:choose>
                         <c:when test="${sessionScope.empName!=null}">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
                                role="button" data-toggle="dropdown" aria-haspopup="true"
-                               aria-expanded="false"> <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.empName}</span>
+                               aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-black-50-600 small">${sessionScope.empName}</span>
                                 <img class="img-profile rounded-circle"
                                      src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div
-                                    class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="userDropdown">
-                                <a class="dropdown-item" id="ME002_5" href="#"> <i
-                                        class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 프로필
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" id="ME002_5" href="#" style="text-align: center">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400" ></i>프로필
                                 </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-itemsss" href="#" data-toggle="modal"
-                                   data-target="#logoutModal"> <i
-                                        class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    로그아웃
+                                <hr class="sidebar-divider">
+                                <a href="#" data-toggle="modal"
+                                   data-target="#logoutModal" text-align="center">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400" ></i>로그아웃
                                 </a>
-                            </div>
+                                <!-- 글자 오른쪽 정렬 안됨 ㅅㅂ 어케된건지 모르겠음 -->
+                            </div>                           <!-- otherwise절 시작 -->
                         </c:when>
                         <c:otherwise>
                             <a class="nav-link dropdown-toggle"
-                               href="${pageContext.request.contextPath}/loginform"> <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">로그인</span>
+                               href="${pageContext.request.contextPath}/loginform">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">로그인</span>
                                 <img class="img-profile rounded-circle"
                                      src="${pageContext.request.contextPath}/assets/img/profile.png">
                             </a>
                         </c:otherwise>
-                    </c:choose></li>
+                        </c:choose>
+                    </li>
                 </ul>
             </nav>
 
-
-
             <!-- End of Topbar -->
+
+
+            <!-- 바디 부분 시작 -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <!--      <sitemesh:write property='body'/> hello.jsp의 body 부분 -->
                 <sitemesh:write property='body' />
             </div>
             <!-- /.container-fluid -->
@@ -550,12 +431,15 @@
 </div>
 <!-- End of Page Wrapper -->
 
+
 <!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top"> <i
-        class="fas fa-angle-up"></i>
+
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
 </a>
 
 <!-- Logout Modal-->
+
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -579,61 +463,52 @@
         </div>
     </div>
 </div>
-<script
-        src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script>
+
+
+<script src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script>
 <!-- Bootstrap core JavaScript-->
-<script
-        src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery.min.js"></script>
-<script
-        src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script
-        src="${pageContext.request.contextPath}/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script
-        src="${pageContext.request.contextPath}/assets/js/sb-admin-2.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins
+<!-- Page level plugins-->
 <script src="${pageContext.request.contextPath}/assets/vendor/chart.js/Chart.min.js"></script>
--->
-<!-- Page level custom scripts
+
+<!-- Page level custom scripts -->
   <script src="${pageContext.request.contextPath}/assets/js/demo/chart-area-demo.js"></script>
   <script src="${pageContext.request.contextPath}/assets/js/demo/chart-pie-demo.js"></script>
- -->
+
+
 <%-- <% ArrayList<String> menuList = (ArrayList<String>) session.getAttribute("menuList");%> --%>
 
 <script>
-    var arr = "<%=(ArrayList<String>) session.getAttribute("menuList")%>";
-    /* $('.confirmMenu').click(function(e){
-       console.log(arr);
-       var text = "";
-       var isAuthority = "";
-       text = $(this).text();
-       isAuthority = arr.includes(text);
-       console.log(isAuthority);
-       if(isAuthority == false){
-          alertFunc();
-          e.preventDefault();
-       }
-    }) */
-
+    // 로그인폼에서 로그인 하는 동시 menulist를 포함한 여러가지(loginForm 참조할것)를 전부 session.setAttribute로 세션에 등록해둠.
+    // .Permission 클래스 속성을 가진 모든 태그들을 누를 때 아래의 이벤트가 발생
+    // 현재 누른 버튼의 주소값 안의 text를 공백제거하고 글자만 남긴다음, menulist에서 받아온 값을 저장하는 arr 변수와 비교하게 되어있음
+    // includes함수(반환형 boolean)를 통해 공백제거한 text 내용이 arr 내용안에 있다면, 문제없지만 false일경우 alertFunc 메서드를 실행하도록 되어 있음
+    // 간략히 말해서 권한 확인을 위한 장치라고 생각하면 됨
+    var arr = "<%=(ArrayList<String>)session.getAttribute("menuList")%>";
     $(document).on('click', '.Permission', function(e){
-        console.log("여기");
+        console.log("" +
+            "");
         console.log(arr);
         var text = "";
         var isAuthority = "";
+        console.log($(this));
+        console.log($(this).text()); // 현재 누른 버튼의 주소값에서 innertext의 값을 들고옴, 하지만 공백도 같이 들고와서 trim함수로 공백을 다 제거해줌
         text = $.trim($(this).text());
         console.log(text);
         console.log("@@@@@@@@@@@@@@@@@@@@@@@@@");
         isAuthority = arr.includes(text);
         console.log(isAuthority);
         if(isAuthority == false){
-            //e.stopPropagation();
             alertFunc();
         }
-
     });
 
     function alertFunc(){
@@ -641,7 +516,7 @@
             icon : 'error',
             title : '접근 불가',
             text : '접근 권한을 확인해주세요',
-            footer : '<a>관리자에게 문의하세요</a>',
+            footer : '관리자에게 문의하세요',
             buttons :{
                 confirm:{
                     text:'확인',
@@ -653,7 +528,6 @@
                 $(location).attr("href","${pageContext.request.contextPath}/loginform");
             }
         })
-
     }
 
     /*수정중  */

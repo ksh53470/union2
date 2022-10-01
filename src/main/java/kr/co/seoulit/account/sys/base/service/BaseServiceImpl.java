@@ -77,6 +77,7 @@ public class BaseServiceImpl implements BaseService {
 
 		for(MenuBean menubean: menuDAO.selectAllMenuList()) {
 			map.put(menubean.getMenuCode(), menubean.getUrl());
+			System.out.println(map + " 여기있으니 찾아봐라 ");
 		}
 
 		return map;

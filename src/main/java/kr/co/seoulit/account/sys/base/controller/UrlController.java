@@ -31,8 +31,8 @@ public class UrlController{
             error.printStackTrace();
          }
       }
-      
       String menuCode = request.getParameter("menuCode");
+      System.out.println(urlList.get(menuCode) + "찾아봐라 여기");
       String url = (request.getContextPath() + urlList.get(menuCode)).toLowerCase();
       
       try {
