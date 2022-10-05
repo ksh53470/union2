@@ -510,7 +510,7 @@
             alertFunc();
         }
     });
-
+    //alertFunc 메서드, Swal.fire로 알림창 띄움.그리고 나서 로그인폼으로 가도록 연결해놓았음
     function alertFunc(){
         Swal.fire({
             icon : 'error',
@@ -529,17 +529,20 @@
             }
         })
     }
-
+    //돔이 켜질때 먼저 읽고 메모리에 올려둠, ready메서드
+    //로그인폼에서 세션에 저장해둔 daptCode를 불러오는지 확인 필요 아마 맞을걸로 예상함
+    //showAuthorityEmp 메서드에 daptCode담아서 실행
     /*수정중  */
     $(document).ready(function () {
         var deptCode=`${deptCode}`;
         console.log("deptCode :"+deptCode);
         showAuthorityEmp(deptCode);
-
+    //collapse-item, dropdown-item 클래스들이 붙은 버튼들을 누를 때 href태그를 뒤에 url매핑으로 바꾸고 url을 db에서 가져오고 바꾸는 형식 - 한바퀴 쭉 돌아보자
         $('.collapse-item, .dropdown-item').on('click', function(e){
             $(location).attr("href","${pageContext.request.contextPath}/url?menuCode="+$(this).attr("id"));
         });
     });
+    //deptCode가 01인 데이터 전부 끌고운 뒤 controlEmp메서드에 넣어서 실행
     function showAuthorityEmp(deptCode) {
         $.ajax({
             type: "GET",
@@ -549,27 +552,35 @@
             },
             dataType: "json",
             success: function (jsonObj) {
+                console.log("여기임"+JSON.stringify(jsonObj));
                 console.log("      @showAuthorityEmp 로드 성공");
                 console.log("jsonObj.authorityEmp"+JSON.stringify(jsonObj));
                 controlEmp(jsonObj);
             }
         });
     }
+    //배열을 만든 후 위에서 제이슨 형식으로 받아온 배열을 3개 다 배열에 push로 넣음
+    //0번째 배열의 menuName(GR01)을 다시 showAuthorityControlDetail메서드에 매개변수로 넣은 다음 실행함
     function controlEmp(arrayEmp){
         var array = [];
-        console.log(arrayEmp);
+        console.log(arrayEmp+"여기당");
         arrayEmp.map(function(obj){
+            console.log(obj);
             array.push(obj);
         });
 
         var menuName=JSON.stringify(array[0].menuName);
+        console.log("menuName"+menuName);
         showAuthorityControlDetail(menuName);
 
     }
+    //menuName값 글자를 ""빼고 글자만 남게 만든다음 파라미터값으로 쓰고 authoritymenu로 매핑, 내부의 서비스 호출함
+    //데이터를 다시 정리해서 제이슨데이타로 빼고, 다시 starUrlAddress메서드 호출
     function showAuthorityControlDetail(menuName) {
 
-
+        console.log("menuName1"+menuName);
         menuName = menuName.replaceAll("\"","");
+        console.log("menuName2"+menuName);
 
         $.ajax({
             type: "GET",
@@ -589,10 +600,13 @@
 
     }
     /* URL IF 문 시작 */
-
+    //map function으로 값 하나하나 분할하여 포문처럼 사용해둠.
+    //map에 담겨있는 authority를 level, menucode를 menucode로 지정하고 menucode가 각각 if문 내부의 갑, 그리고 &&연산자로 level이 1이아니라 0인 상태에서 alert 메서드 실행하도록 해둠
+    //에러처리라고 보면 됨, 권한확인하고 권한이 없다면 에러메세지 alert가 실행된다 생각하면됨
     function starUrlAddress(arrayUrl){
         console.log("arrayUrl :" + JSON.stringify(arrayUrl));
         arrayUrl.map(function(obj){
+            console.log(obj);
             var level =obj.authority;
             var url = obj.url;
             var menuCode = obj.menuCode;

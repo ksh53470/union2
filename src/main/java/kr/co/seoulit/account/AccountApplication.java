@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import kr.co.seoulit.account.sys.common.interceptor.LoggerInterceptor;
+
 import kr.co.seoulit.account.sys.common.interceptor.SessionListener;
 
 

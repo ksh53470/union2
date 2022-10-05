@@ -2,12 +2,12 @@ package kr.co.seoulit.account.operate.system.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.seoulit.account.sys.common.exception.DataAccessException;
 import kr.co.seoulit.account.operate.system.mapper.AccountSubjectMapper;
 import kr.co.seoulit.account.operate.system.mapper.AuthorityGroupMapper;
 import kr.co.seoulit.account.operate.system.mapper.CustomerMapper;
@@ -130,6 +130,11 @@ public class SystemServiceImpl implements SystemService{
 
         	ArrayList<AuthorityEmpBean> authorityEmp = null;
         	authorityEmp = authorityGroupDAO.selectAuthorityEmp(deptCode);
+			Iterator<AuthorityEmpBean> iter = authorityEmp.iterator();
+		while (iter.hasNext()) {
+
+			System.out.println(iter.next()+"여기임");
+		}
 
         return authorityEmp;
     }

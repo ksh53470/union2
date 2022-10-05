@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,10 +36,14 @@ public class AuthorityController {
 
 	@GetMapping("/authorityemp")
     public ArrayList<AuthorityEmpBean> findAuthorityEmp(@RequestParam String deptCode) {
-       
-        	
+
+        System.out.println(deptCode+"여기당");
             ArrayList<AuthorityEmpBean> authorityEmp = systemService.findAuthorityEmp(deptCode);
-           
+        Iterator<AuthorityEmpBean> iter = authorityEmp.iterator();
+        while (iter.hasNext()) {
+
+            System.out.println(iter.next()+"여기임2");
+        }
         return authorityEmp;
     }
 	
