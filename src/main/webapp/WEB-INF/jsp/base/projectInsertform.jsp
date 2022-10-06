@@ -17,7 +17,7 @@
   	</style>
    <script>
   $(document).ready(function () {
-
+		console.log("시작됨")
       createAccount();
       showAccount();
       createAccountDetail();

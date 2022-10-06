@@ -36,8 +36,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/base")
 public class BoardController {
+
 	@Autowired
 	private BaseService baseService;
+
 
 	@GetMapping("/boardlist")
 	public ArrayList<BoardBean> findParentboardList() {

@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-
+    <!--aggrid를 쓰기 위한 소스-->
     <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
@@ -76,13 +76,13 @@
     </style>
     <script>
         $(document).ready(function () {
-            //버튼 이벤트
+            //버튼색 바꿔주는 이벤트
             $('input:button').hover(function () { // hover가 2개의 인자값이 있으면 첫번째 인자값은 마우스올렸을때 ,두번째는 땟을때 실행
-                    $(this).css("background-color", "pink");
-                },
-                function () {
+                    $(this).css("background-color", "blue");
+            },
+            function () {
                     $(this).css("background-color", "");
-                });
+            });
 
             $("#search").click(searchSlip);         // (전표)검색
             $("#addSlip").click(addslipRow);            // 전표추가
@@ -447,6 +447,7 @@
                     },
                     {
                         headerName   : "계정과목", field: "accountName",
+
                         onCellClicked: function open() {
                             $("#accountGridModal").modal('show');
                             searchAccount();
@@ -870,8 +871,9 @@
         }
 
         //전표 보기
+        //날짜값(from, to)와 slipStatus에 value값을 파라매터로 보낸다
         function showSlipGrid() {   // 먼저 날짜 데이트를 받고 / 전표추가시 오늘날짜를 actual argument로 넘긴다.
-
+            console.log($("#selTag").val());
             $.ajax({
                 url     : "${pageContext.request.contextPath}/posting/rangedsliplist",
                 data    : {
@@ -972,7 +974,7 @@
             computeJournalTotal();
         }
 
-
+        <!-- 분개모달창시작 -->
         var accountGrid;
         var gridOptionsAccount;
 
@@ -1019,6 +1021,8 @@
             });
         }
 
+        <!-- 분개상세모달창시작 -->
+
         var gridOpionsAccountDetail
 
         function createAccountDetailGrid() {
@@ -1041,6 +1045,7 @@
                 onGridSizeChanged  : function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리
                     event.api.sizeColumnsToFit();
                 },
+                <!-- 분개상세모달창 -->
                 onCellDoubleClicked: function (event) {
                     $("#accountGridModal").modal('hide');
                     gridOptions2.api.applyTransaction([selectedJournalRow['accountCode'] = event.data["accountInnerCode"]]);
@@ -1425,7 +1430,7 @@
 
     </script>
 </head>
-
+<%---------------------------------body부분------------------------------------------%>
 <body class="bg-gradient-primary">
 <h4>전표</h4>
 <hr>
@@ -1445,7 +1450,7 @@
 </div>
 
 <div>
-
+    <%---------------------------------------버튼들------------------------------------%>
     <div style="text-align:right;">
         <input type="button" id="addSlip" value="전표 추가(F2)" class="btn btn-Light shadow-sm btnsize">
         <input type="button" id="deleteSlip" value="전표 삭제" class="btn btn-Light shadow-sm btnsize">
@@ -1455,18 +1460,21 @@
 
     </div>
 </div>
+<!-- 전표 그리드 -->
 <div align="center"> <!-- 셀정렬 -->
     <div id="slipGrid" class="ag-theme-balham" style="height:250px;width:auto;"></div>
 </div>
 <hr/>
 <h3>분개</h3>
+<!-- 분개 그리드 -->
 <div align="right">
     <input type="button" id="addJournal" value="분개 추가" class="btn btn-Light shadow-sm btnsize">
     <input type="button" id="deleteJournal" value="분개 삭제" class="btn btn-Light shadow-sm btnsize">
     <div id="journalGrid" class="ag-theme-balham" style="height:450px;width:auto;"></div>
 </div>
 
-
+<!-- journalGrid의 그리드 내용인 gridOption2에 oncellclicked 메서드 걸려있음, cell누르자마자 clicked안의 모달.show메서드 실행. 모달 보며주면서 아래 연결된 메서드 같이 실행 -->
+<!-- 계정과목 직접입력 후 검색 기능 안됨 -->
 <div class="modal fade" id="accountGridModal" tabindex="-1" role="dialog"
      aria-labelledby="accountGridLabel" style="padding-right: 210px;">
     <div class="modal-dialog" role="document">
@@ -1505,7 +1513,7 @@
     </div>
 </div>
 
-
+<%--
 <div align="center" class="modal fade" id="journalDetailGridModal" tabindex="-1" role="dialog"
      aria-labelledby="journalDetailGridLabel">
     <div class="modal-dialog" role="document">
@@ -1523,7 +1531,7 @@
         </div>
     </div>
 </div>
-
+<!-- gridOption4를 사용한 분개상세쪽 grid인데 사용안하고있음 -->
 <div align="center" class="modal fade" id="codeModal" tabindex="-1" role="dialog"
      aria-labelledby="codeLabel">
     <div class="modal-dialog" role="document">
@@ -1549,8 +1557,8 @@
             </div>
         </div>
     </div>
-</div>
-<!-- 거래처 코드 -->
+</div>--%>
+<!-- 거래처 모달창 -->
 <div align="center" class="modal fade" id="customerCodeModalGrid" tabindex="-1" role="dialog"
      aria-labelledby="customerCodeModalGrid">
     <div class="modal-dialog" role="document">
