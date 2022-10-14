@@ -187,10 +187,10 @@ public class BaseServiceImpl implements BaseService {
 	public ArrayList<DetailCodeBean> findDetailCodeList(HashMap<String, String> param) {
 
 
-		ArrayList<DetailCodeBean> datailCondeList = null;
-		datailCondeList = detailCodeDAO.selectDetailCodeList(param);
-
-		return datailCondeList;
+		ArrayList<DetailCodeBean> detailCodeList = null;
+		detailCodeList = detailCodeDAO.selectDetailCodeList(param);
+		System.out.println("detailCodeList :" + detailCodeList);
+		return detailCodeList;
 	}
 
 	@Override

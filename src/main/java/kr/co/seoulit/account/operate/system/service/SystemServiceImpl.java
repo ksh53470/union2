@@ -69,8 +69,10 @@ public class SystemServiceImpl implements SystemService{
     @Override
     public ArrayList<AccountBean> findAccountListByName(String accountName) {
 
+		System.out.println("accountName in service :"+accountName);
         	ArrayList<AccountBean> accountList = null;
         	accountList = accountDAO.selectAccountListByName(accountName);
+		System.out.println("accountList in service:"+accountList);
 
         return accountList;
     }

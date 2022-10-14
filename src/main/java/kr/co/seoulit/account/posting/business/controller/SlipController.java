@@ -147,7 +147,7 @@ public class SlipController {
         param.put("fromDate", fromDate);
         param.put("toDate", toDate);
         param.put("slipStatus", slipStatus);
-
+        System.out.println("param값 :"+param);
         return businessService.findRangedSlipList(param);
     }
 

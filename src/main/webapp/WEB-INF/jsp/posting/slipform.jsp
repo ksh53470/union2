@@ -1,5 +1,5 @@
 ?<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <!-- JSTL을 사용하기 위해 커스텀 액션을 사용하겠다 라고 선언하는 것 -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,11 +9,15 @@
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
 
-    <%--DatePicker--%>
+    <%--jquery를 쓰기 위한 소스--%>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <title>메인</title>
+    <!-- css를 안에 넣어둠 -->
+    <!-- em단위는 부모 요소의 글꼴 크기를 말함, 0.9는 배율 -->
+    <!-- css는 같은 속성을 여러번 정의했을 때. 나중에 설정한 값이 적용됩니다. 하지만 나중에 설정한 값이 적용되지 않게 하려면 속성값 뒤에 !important를 붙임 -->
+    <!-- \f11f 이런것들은 전부다 직사각형 모양의 그림들임, 다 비슷비슷함 거의 똑같이 생김 -->
     <style>
         .date {
             width: 140px;
@@ -41,6 +45,7 @@
         }
 
         /*글자 밑에 있는거 중앙으로  */
+
         .ag-row .ag-cell {
             display: flex;
             justify-content: center !important; /* align horizontal */
@@ -74,26 +79,30 @@
         }
 
     </style>
+    <!-- css 선언 끝, script 선언 시작 -->
+    <!-- doucument.ready로  DOM(Document Object Model) 객체가 생성되는 시점에 실행됨. function 안에 모든 것들이 실행됨
+    이게 DOMCONTENSLOAD와 똑같다고 보면 됨. 물류 프로젝트에서는 그리드를 CONTENTSLOAD로 띄웠지만 회계는 DOCUMENT.READY방식으로 띄움, 둘이 똑같음-->
     <script>
         $(document).ready(function () {
             //버튼색 바꿔주는 이벤트
-            $('input:button').hover(function () { // hover가 2개의 인자값이 있으면 첫번째 인자값은 마우스올렸을때 ,두번째는 땟을때 실행
-                    $(this).css("background-color", "blue");
+            $('input:button').hover(
+                function () { // hover가 2개의 인자값이 있으면 첫번째 인자값은 마우스올렸을때 ,두번째는 땟을때 실행 - 마우스 올리면 노란색, 때면 무색
+                    $(this).css("background-color", "yellow");
             },
-            function () {
+                function () {
                     $(this).css("background-color", "");
-            });
-
+            }
+            );
             $("#search").click(searchSlip);         // (전표)검색
             $("#addSlip").click(addslipRow);            // 전표추가
             $("#deleteSlip").click(deleteSlip);      // 전표삭제 - 전표, 분개, 분개상세
             $("#addJournal").click(addJournalRow);      // 분개추가
             $("#deleteJournal").click(deleteJournal);   // 분개삭제, 화영이가 구현
-            $("#showPDF").click(createPdf); // pdf보기
+            $("#showPDF").click(createPdf);             // pdf보기
+            $("#saveSlip").click(saveSlip);              // 전표저장
             $("#confirm").click(confirmSlip);         // 결재 버튼
-            $("#Accountbtn").click(searchAccount); // 모달에서의 계정 검색 버튼
-            $("#saveSlip").click(saveSlip); // 전표저장
-            $("#accountCode").keydown(function (key) {
+            $("#Accountbtn").click(searchAccount);   // 모달에서의 계정 검색 버튼
+            $("#accountCode").keydown(function (key) { //모달창 안에서 계정과목 입력해서 찾아주는 메서드, 실행안됨 고쳐야됨, 누르는 순간 searchAccount 메서드 실행됨, 그 이후가 안되는듯
                 if (key.keyCode == 13) {
                     searchAccount();
                 }
@@ -102,10 +111,10 @@
 
 
             /* DatePicker  */
-            $('#from').val(today.substring(0, 8) + '01');
-            // 오늘이 포함된 해당 달의 첫번째 날, 1월달이면 1월 1일로 세팅.    2020-xx 총 7자리
-            $('#to').val(today.substring(0, 10));         // 오늘 날짜의 년-월-일.
+            $('#from').val(today.substring(0, 8) + '01');//오늘날짜에서 맨뒤 두자리인 날짜는 01로 지정되도록 값을 세팅함, 초기값을 주는 형식, 날짜는 무조건 해당 달의 1일로 나타나게해둠
+            $('#to').val(today.substring(0, 10));         // 오늘 날짜의 년-월-일, 마찬가지로 초기값을 주는거임
 
+            <!-- 아래 모든 메서드들을 DOM 객체가 생성되는 시점에 실행함, 하나하나 다 볼것, 그리드도 여기서 만듬 -->
             createSlip();
             createJournal();
             createjournalDetailGrid();
@@ -116,6 +125,9 @@
             createCustomerCodeGrid();
             createAccountDetailGrid()
             showAccountDetail('0101-0145') //처음 보이는 값이 당좌자산 첫번째껄로 보이게 해놓음, 두 사람에게 설명해줘야 야 함
+
+            // DOM 로드될때 실행되는 순서 기록
+            // createSlip 실행- createSlip 내부의 enableElement 실행 - createJournal 실행
 
         });
         window.addEventListener("keydown", (key) => {
@@ -209,9 +221,11 @@
         var slipGrid;
 
         // slipGrid 생성
+        // DOM 객체 생성되면 아래 createSlip 메서드 바로 실행됨, 콘솔창에 로그 기록됨
+        // attribute sort 뜻이 뭐지? sort desc는 정렬을 의미하는 것으로 추측되지만 구글링해도 잘 모르겠음...
+        // resizable 은 true가 default값, 열 너비 조정을 뜻함, 만약 false로 해놓으면 열 너비 수동으로 조정할 수 없음
         function createSlip() {
             console.log("createSlip() 실행");
-            rowData = [];
             var columnDefs = [
                 {headerName: "전표번호", field: "slipNo", sort: "desc", resizable: true, width: 100},
                 {headerName: "기수", field: "accountPeriodNo", resizable: true, width: 70},
@@ -243,22 +257,22 @@
                 onGridReady                  : function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
                     event.api.sizeColumnsToFit(); // 그리드의 사이즈를 자동으로정리 (처음 틀었을때 양쪽 폭맞춰주는거같음)
                 },
-                onGridSizeChanged            : function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리  (화면 비율바꿧을때 양쪽폭 맞춰주는거같음)
+                onGridSizeChanged            : function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리  (화면 비율바꿧을때 양쪽폭 맞춰줌)
                     event.api.sizeColumnsToFit();
                 },
                 onRowClicked                 : function (event) {
                     console.log("sliprow선택");
                     selectedSlipRow = event.data;
                     console.log(selectedSlipRow);
-                    showJournalGrid(event.data["slipNo"]);
+                    showJournalGrid(event.data["slipNo"]); //셀 클릭하는 순간 선택한 셀의 데이터가 콘솔에 출력됨, 그리고 showJournalGrid 메서드가 실행됨
 
 
-                    if (selectedSlipRow.slipStatus != '승인완료') {
+                    if (selectedSlipRow.slipStatus != '승인완료') { // 선택한 로우의 slipStatus의 값이 승인완료가 아니라면 아래 4항목 true로, 값이 승인완료라면 아래 4항목 false로 바꿈
                         enableElement({
-                            "#deleteSlip"   : true,
-                            "#addJournal"   : true,
-                            "#deleteJournal": true,
-                            "#confirm"      : true
+                            "#deleteSlip"   : true,  //전표삭제버튼
+                            "#addJournal"   : true,  //분개추가버튼
+                            "#deleteJournal": true,  //분개삭제버튼
+                            "#confirm"      : true   //결재신청버튼
                         });
                     } else {
                         enableElement({
@@ -269,13 +283,10 @@
                         })
                     }
                     ;
-
-
                 },
-
             };
-            slipGrid = document.querySelector('#slipGrid');
-            new agGrid.Grid(slipGrid, gridOptions);
+            slipGrid = document.querySelector('#slipGrid');  //Body에 선언해놓은 Grid Id값을 쿼리셀렉터로 가져와서 slipGrid 변수 세팅하고 newagGrid.Grid(slipGrid, gridOptions)로 그리드에 데이터를 집어넣음
+            new agGrid.Grid(slipGrid, gridOptions);          //그리드 자체는 이미 dom객체가 생성될 때 만들어져 있는 상태였음, 값만 넣은 것
             enableElement({
                 "#addSlip"      : true,
                 "#deleteSlip"   : false,
@@ -285,7 +296,7 @@
             });
 
 
-            gridOptions.api.setRowData([]);  // 왜 빈값으로 할당하지 ?(dong)
+           // gridOptions.api.setRowData([]);  // 왜 빈값으로 할당하지 ?(dong)
         }
 
 
@@ -426,6 +437,7 @@
         var selectedJournalRow;
 
         //Journal 생성
+        //먼저 gridOptions 칼럼에 들어갈 값과 함수들 선언. 결국 그리드에 값 넣고 띄우려면 aggrid.grid(grid 태그 id값, gridOptions) 를 실행하면 된다.
         function createJournal() {
             console.log("createJournal() 실행");
             rowData2 = [];
@@ -433,8 +445,8 @@
                 columnDefs                   : [
                     {
                         headerName  : "분개번호", field: "journalNo",
-                        cellRenderer: 'agGroupCellRenderer',  // Style & Drop Down
-                        sort        : "asc", resizable: true, onCellDoubleClicked: cellDouble
+                        cellRenderer: 'agGroupCellRenderer',  // Style & Drop Down  //cellRenderer 는 사용자에게 확장 및 축소 시능을 제공하는 attribute다, 키는 agGroupCellrenderer이며, 사용했을 시 많은 속성을 사용할 수 있다.
+                        sort        : "asc", resizable: true, onCellDoubleClicked: cellDouble  //이건 onCellDoubleClick을 했을 시 cellDouble 메서드를 실행시킨다는 거임, 앞에 적혀있는건 메서드실행하는거 아님 둘이 다름. 명심!!
                     },
                     {
                         headerName      : "구분", field: "balanceDivision", editable: true,
@@ -448,7 +460,7 @@
                     {
                         headerName   : "계정과목", field: "accountName",
 
-                        onCellClicked: function open() {
+                        onCellClicked: function open() {  //계정과목 더블클릭시 모달창 띄우고 searchAccount 메서드 실행. 모달창 검색창에 계정과목 한글로 검색하면 관련된 계정과목이 오른쪽 그리드에 출력되도록 쿼리문 짜져있음
                             $("#accountGridModal").modal('show');
                             searchAccount();
                         }
@@ -456,10 +468,10 @@
                     {
                         headerName    : "차변", field: "leftDebtorPrice",
                         editable      : params => {
-                            if (params.data.balanceDivision === '대변') return false
+                            if (params.data.balanceDivision === '대변') return false  //구분 컬럼에 있는 대변or차변에 따라 서로 다르면 수정을 못하도록 false값 줬음, 차변구분이 차변일때 수정가능, 대변구분이 대변일때 수정가능하도록 만들어둠
                             else return true
                         },
-                        valueFormatter: currencyFormatter		// 통화 값에 대한 로캘별 서식 지정 및 파싱을 제공
+                        valueFormatter: currencyFormatter		// 통화 값에 대한 로캘별 서식 지정 및 파싱을 제공, 함수로 설정해둠, 금액 입력시 '￦'가 나타나게 한다. 검색하면 함수있음
                     },
                     {
                         headerName    : "대변", field: "rightCreditsPrice",
@@ -472,19 +484,20 @@
                     //수정중
                     {
                         headerName   : "거래처", field: "customerName",
-                        onCellClicked: function open() {
+                        onCellClicked: function open() {        //거래처 셀 클릭하면 거래서코드모달그리드 창이 열리면서 동시에 searchCustomerCodeList()메서드를 실행한다.
                             $("#customerCodeModalGrid").modal('show');
                             searchCustomerCodeList();
                         }
 
                     },
-                    {headerName: "거래처", field: "customerName", hide: true},
+                    //{headerName: "거래처", field: "customerName", hide: true}, -- 필요없는 코드, 중복임
                     {headerName: "상태", field: "status"}
                 ],
-                masterDetail                 : true,
-                enableCellChangeFlash        : true,
-                detailCellRendererParams     : {
-                    detailGridOptions: {
+                masterDetail                 : true,  //masterDetail 이 표시된 그리드는 최상위 그리드를 나타냅니다. 행이 확장되면 관련된 세부정보가 포함된 다른 그리드가 표시됨, 그런건 상세그리드라고 함.
+                                                      //masterDetail을 표시해두면 detailCellRendererParams에서 상세 그리드를 나타낼 수 있다.
+                enableCellChangeFlash        : true,  //true일때 변경사항이 감지되면 셀이 깜빡이도록 허용한다. -- 보면 거래처나 차변, 대변값이 들어갈때마다 초록색으로 살짝 깜빡인다.
+                detailCellRendererParams     : {      //하위 그리드에서 가지고 있는 옵션, 이건 모달창에 뜨는 그리드랑 약간 다르다.
+                    detailGridOptions: {              //하위 그리드
                         rowSelection          : 'single',
                         enableRangeSelection  : true,		// 끌어서 선택옵션
                         pagination            : true,
@@ -500,7 +513,7 @@
                                 headerName  : "분개 상세 내용",
                                 field       : "journalDescription",
                                 width       : 250,
-                                cellRenderer: cellRenderer
+                                cellRenderer: cellRenderer //????????????????
                             },
                         ],
                         defaultColDef         : {
@@ -513,19 +526,24 @@
                             console.log("getRowNodeId: " + data.journalDetailNo);
                             return data.journalDetailNo;
                         },
-                        onRowClicked          : function (event) {  // 상위 테이블에 있는 상세보기버튼으로도 실행됨.(dong)
+                        onRowClicked          : function (event) {
                             console.log("onRowClicked 실행");
                             selectedJournalDetail = event.data;
                             selectedJournalRow = event.data;
+                            console.log(selectedJournalDetail);
+                            console.log("하위그리드의 selectedJournalDetail값 : " + selectedJournalDetail);
+                            console.log("하위그리드의 selectedJournalRow값 :" + selectedJournalRow);
 
                         },
-                        onCellDoubleClicked   : function (event) {
+                        onCellDoubleClicked   : function (event) { //작동안됨, 하위 그리드 두번 누를 시 뭔가가 실행되야되는데 안됨. 알아보자
                             console.log("onCellDoubleClicked 실행");
                             var journalNo = event.data["journalNo"];
-                            var detailGridApi = gridOptions2.api.getDetailGridInfo('detail_' + event.data["journalNo"]);
+                            console.log("journalNo : "+journalNo);
+                            var detailGridApi = gridOptions2.api.getDetailGridInfo('detail_' + event.data["journalNo"]); //주어진 값에 detail접두사를 붙여 상세 그리드의 ID를 생성한다.
+                            console.log("detailGridApi : "+detailGridApi);
                             console.log(detailGridApi);
 
-                            if (event.data["accountControlType"] == "SEARCH") {
+                            if (event.data["accountControlType"] == "SEARCH") {  //계정설정속성이 search라면 codeModal 띄우고 값 넣기
                                 $("#codeModal").modal('show');
                                 detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescription"] = searchCode()]);
 
@@ -635,21 +653,25 @@
             new agGrid.Grid(journalGrid, gridOptions2);
         }
 
-        function cellDouble(event) {
+        function cellDouble(event) {  //분개번호 칼럼을 더블클릭시 실행되는 메서드
             console.log("cellDouble(event) 실행");
-            if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {
-                $("#journalDetailGridModal").modal('show');
+            console.log(selectedSlipRow["slipNo"]);
+            console.log(NEW_SLIP_NO);
+            console.log(selectedJournalRow); // 셀 한번 클릭하는 순간 위애서 eventdata로 여기에 값을 넣어버림, 그래서 더블클릭하면 무조건 이 값이 들어있을 수 밖에 없게 해놈
+            if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {  //두개는 항상 다르게 되어있는데 굳이 조건식을 건 이유는?
+                $("#journalDetailGridModal").modal('show');  //분개상세그리드 모달창을 띄우도록 함, id값 검색하면 body부분에 grid하나 있음
                 //분개상세 보기
                 $.ajax({
                     type: "GET",
                     // JournalDetailDAO- ArrayList<JournalDetailBean> selectJournalDetailList(String journalNo)- return journalDetailBeans
-                    url     : "${pageContext.request.contextPath}/posting/journaldetaillist",
+                    url     : "${pageContext.request.contextPath}/posting/journaldetaillist",   //요기로 이동, journalNo를 파라미터로 보냄
                     data    : {
-                        "journalNo": selectedJournalRow["journalNo"] //rowid 분개번호임
+                        "journalNo": selectedJournalRow["journalNo"] //선택한 분개번호 no를 파라매터로 넘김
                     },
                     dataType: "json",
                     success : function (jsonObj) {
-                        gridOptions4.api.setRowData(jsonObj);
+                        console.log(JSON.stringify(jsonObj)); //데이터 잘 들고오는지 확인
+                        gridOptions4.api.setRowData(jsonObj); //가져온 데이터를 gridOption4의 칼럼명에 맞게 하나하나 세팅해주기
                     }
                 });
             }
@@ -1095,8 +1117,7 @@
                 }
             });
         }
-
-        ///  모달 내부에서 검색
+        // 계정과목 클릭시 나오는 모달창과 함께 실행되는 메서드
         function searchAccount() {
             console.log("searchAccount() 실행");
             // show loading message
@@ -1108,7 +1129,9 @@
                 },
                 dataType: "json",
                 success : function (jsonObj) {
-                    gridOpionsAccountDetail.api.setRowData(jsonObj.accountList); //내부 상세 그리드
+                    console.log(JSON.stringify(jsonObj));
+                    console.log(JSON.stringify(jsonObj.accountList));
+                    gridOpionsAccountDetail.api.setRowData(jsonObj); //내부 상세 그리드(오른쪽)에 값 넣기, gridoption.api.setRowdata실행 시 데이터 세팅함 - 잘못세팅되어있엇는데 고쳐놓음
                     $("#accountCode").val(""); // 검색한다음에 지우기 셋팅(dong)
                 }
             });
@@ -1120,9 +1143,9 @@
             $.ajax({
                 type    : "POST",
                 url     : "${pageContext.request.contextPath}/operate/allworkplacelist",
-                data    : {},
+                //data    : {},
                 dataType: "json",
-                success : function (jsonObj) {
+                success : function (jsonObj) {      //제이슨 형식으로 모든 거래처 리스트를 불러온다. 그리고 그걸 gridOptions6의 컬럼에 전부 세팅한다. 나머지는 gridOptions6에서 확인하기!!!!!
                     //console.log("거래처코드 : " +JSON.stringify(jsonObj.allWorkplaceList));
                     gridOptions6.api.setRowData(jsonObj);
 
@@ -1211,11 +1234,13 @@
         function cellRenderer(params) {  // 중복되는일이라 불필요(dong)
             console.log("cellRenderer(params) 실행");
             var result;
-            if (params.value != null)
+            if (params.value != null){
                 result = params.value;
-            else
+                console.log(result);
+            }
+            else {
                 result = ''
-
+            }
             return result;
         }
 
@@ -1297,9 +1322,9 @@
 
 
                 //cell double click
-                onCellDoubleClicked: function (event) {
+                onCellDoubleClicked: function (event) {     //거래처코드 모달창의 그리드 셀을 더블클릭시 모달창을 끄면서 내가 선택한 로우의 workplaceName을 selectedJournalRow의 customerName컬럼에 값을 넣는다.
                     $("#customerCodeModalGrid").modal('hide');
-                    gridOptions2.api.applyTransaction([selectedJournalRow['customerName'] = event.data["workplaceName"]]);
+                    gridOptions2.api.applyTransaction([selectedJournalRow['customerName'] = event.data["workplaceName"]]);      //api.applyTransaction은 UpdateRowData에서 변경된거라 생각하면 된다.
 
                 }
             };
@@ -1307,7 +1332,7 @@
             new agGrid.Grid(customerCodeGrid, gridOptions6);
         }
 
-        //분개 상세 부서조회에서의 코드조회
+        //분개 상세 부서조회에서의 코드조회  - 분개 상세의 하위 그리드 더블클릭 시 계정 설정 에서 search일때 더블킬릭하면 실행되는 메서드
         function searchCode() {
             console.log("searchCode 실행");
             $.ajax({
@@ -1340,9 +1365,10 @@
                 dataType: "json",
                 async   : false,
                 success : function (jsonObj) {
-                    console.log(jsonObj);
+                    console.log("selectBank의 jsonObj"+jsonObj);
+                    console.log(JSON.stringify(jsonObj));
                     $("<option></option>").appendTo(ele).val('').html('')  //val()은 빼도 상관없을듯(dong)
-                    $.each(jsonObj.detailCodeList, function (index, obj) {
+                    $.each(jsonObj, function (index, obj) {
                         $("<option></option>").appendTo(ele).val(obj.detailCode + ", " + obj.detailCodeName).html(obj.detailCodeName); //앞이 코드번호 , 뒤에가 계좌번호
                     }); //위에서 빈칸넣고 each에서 값넣고
                 }
@@ -1474,7 +1500,7 @@
 </div>
 
 <!-- journalGrid의 그리드 내용인 gridOption2에 oncellclicked 메서드 걸려있음, cell누르자마자 clicked안의 모달.show메서드 실행. 모달 보며주면서 아래 연결된 메서드 같이 실행 -->
-<!-- 계정과목 직접입력 후 검색 기능 안됨 -->
+<!-- 계정과목 직접입력 후 검색 기능 안됨 - 고침 -->
 <div class="modal fade" id="accountGridModal" tabindex="-1" role="dialog"
      aria-labelledby="accountGridLabel" style="padding-right: 210px;">
     <div class="modal-dialog" role="document">
@@ -1513,7 +1539,6 @@
     </div>
 </div>
 
-<%--
 <div align="center" class="modal fade" id="journalDetailGridModal" tabindex="-1" role="dialog"
      aria-labelledby="journalDetailGridLabel">
     <div class="modal-dialog" role="document">
@@ -1531,7 +1556,7 @@
         </div>
     </div>
 </div>
-<!-- gridOption4를 사용한 분개상세쪽 grid인데 사용안하고있음 -->
+<!-- gridOption4를 사용한 분개상세쪽 grid인데 사용안하고있음, 사용하고잇엇는대 내가 못찾은거였음 근데 어케 띄워야할지 모름, 하위 그리드의 계정설정 속성을 search로 바꾸면 뜨는데 어떻게 바꿔야할지 찾아봐야할듯-->
 <div align="center" class="modal fade" id="codeModal" tabindex="-1" role="dialog"
      aria-labelledby="codeLabel">
     <div class="modal-dialog" role="document">
@@ -1557,7 +1582,7 @@
             </div>
         </div>
     </div>
-</div>--%>
+</div>
 <!-- 거래처 모달창 -->
 <div align="center" class="modal fade" id="customerCodeModalGrid" tabindex="-1" role="dialog"
      aria-labelledby="customerCodeModalGrid">

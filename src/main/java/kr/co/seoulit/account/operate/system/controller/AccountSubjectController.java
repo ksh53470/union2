@@ -45,8 +45,8 @@ public class AccountSubjectController {
     }
     @GetMapping("/accountlistbyname")
     public ArrayList<AccountBean> findAccountListByName(@RequestParam String accountName) {
- 
 
+        System.out.println("accountName :"+accountName);
     	ArrayList<AccountBean> accountList = systemService.findAccountListByName(accountName);
  
         return accountList;

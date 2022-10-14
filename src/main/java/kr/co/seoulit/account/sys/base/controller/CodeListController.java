@@ -35,7 +35,7 @@ public class CodeListController{
 	   
 	@GetMapping("/detailcodelist")
  public ArrayList<DetailCodeBean> findDetailCodeList(@RequestParam String divisionCodeNo,
- 												    @RequestParam(value="detailCodeName", required=false) String detailCodeName) {
+ 												    @RequestParam(value="detailCodeName", required=false) String detailCodeName) {  //required = false 속성을 추가하면 해당 파라미터가 날라오지 않아도 예외가 발생하지 않는다.
      
 
          HashMap<String, String> param = new HashMap<>();
