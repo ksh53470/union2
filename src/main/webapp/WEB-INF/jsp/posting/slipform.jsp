@@ -930,7 +930,7 @@
 
             var totalObject = $.extend(true, {}, journalObj);
             rowData2.push(totalObject);
-
+            console.log(rowData2);
 
             if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {
                 $.ajax({
@@ -1352,7 +1352,8 @@
         }
 
 
-        function selectBank() {
+        function selectBank() { //분개상세 그리드의 하위 그리드의 계정설정속성값이 select 일때, 셀 아무거나 두번 클릭했을 시 발생하는 메서드. 분개상세내용의 값에 옵션을 주도록 만들어둠,
+                                //그런 다음 saveJournalDetailRow 메서드 실행
             console.log("selectBank() 실행");
             ele = document.createElement("select");
             ele.id = "selectId"
@@ -1366,18 +1367,19 @@
                 async   : false,
                 success : function (jsonObj) {
                     console.log("selectBank의 jsonObj"+jsonObj);
-                    console.log(JSON.stringify(jsonObj));
-                    $("<option></option>").appendTo(ele).val('').html('')  //val()은 빼도 상관없을듯(dong)
+                    console.log(jsonObj);
+                    $("<option></option>").appendTo(ele).html(''); //옵션 값 초기화
                     $.each(jsonObj, function (index, obj) {
-                        $("<option></option>").appendTo(ele).val(obj.detailCode + ", " + obj.detailCodeName).html(obj.detailCodeName); //앞이 코드번호 , 뒤에가 계좌번호
-                    }); //위에서 빈칸넣고 each에서 값넣고
+                        $("<option></option>").appendTo(ele).html(obj.detailCodeName);
+                    });
                 }
             });
 
             $(ele).change(function () {
                 console.log("$(ele).change 실행");
+                console.log($(this).val());
                 gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = $(this).children("option:selected").text()]);
-                gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = $(this).val()]);
+                gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = $(this).val()]);//내가 옵션에서 선택한 값을 숨겨진 journalDescriptionCode 항목에 저장해둠
                 saveJournalDetailRow();
             })
 
@@ -1404,7 +1406,7 @@
                 rjournalDescription = selectedJournalDetail["journalDescriptionCode"]; //- 숨겨진 곳에 저장한 값
 
             else
-                rjournalDescription = selectedJournalDetail["journalDescription"];
+                rjournalDescription = selectedJournalDetail["journalDescription"];//어차피 위에것과 아래것 둘다 값 같음, 왜 이렇게 해두었을까? 아마 search부분에 답이있을듯?
 
             $.ajax({
                 type    : "GET",
@@ -1414,12 +1416,11 @@
                     accountControlType: selectedJournalDetail["accountControlType"],
                     journalDetailNo   : selectedJournalDetail["journalDetailNo"],
                     journalDescription: rjournalDescription
-
                 },
                 dataType: "json",
-                async   : false,
-                success : function (jsonObj) {
-                    console.log("분개 상세  저장 성공");
+                //async   : false,//비동기식으로 작동시켜놨는데, 그냥 동기식으로 해놓으면 됨, false 에서 true로 바꿔놈
+                complete : function () {//데이터 받을 게 없기때문에 완료만되면 무조건 실행하는 complete로 바꿔둠
+                    console.log("분개 상세  저장 성공");//이까지가 되야 전부 journal_detail 테이블에 내용 바뀜
                 }
             });
         }

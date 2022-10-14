@@ -46,8 +46,10 @@ public class BusinessServiceImpl implements BusinessService {
         System.out.println("findSearch: " + findSearch);
 
         journalDAO.updateJournalDetail(journalDetailBean); //분개번호로 내용만 업데이트함
-        if (findSelect || findSearch)
+        if (findSelect || findSearch) {
             dName = journalDAO.selectJournalDetailDescriptionName(journalDetailNo);
+        }
+        System.out.println("dName :"+dName);//널값나옴, 이건 왜 해놨을까?
 
         return dName;
     }

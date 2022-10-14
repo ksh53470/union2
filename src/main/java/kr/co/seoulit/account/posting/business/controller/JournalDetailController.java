@@ -36,7 +36,7 @@ public class JournalDetailController {
 	public ArrayList<JournalDetailBean> findJournalDetailList(@RequestParam String journalNo) {
 
 		ArrayList<JournalDetailBean> journalDetailList = businessService.findJournalDetailList(journalNo);
-
+		System.out.println("journalDetailList :"+journalDetailList);
 		return journalDetailList;
 	}
 
@@ -51,10 +51,10 @@ public class JournalDetailController {
 		journalDetailBean.setJournalNo(journalNo);
 		journalDetailBean.setJournalDetailNo(journalDetailNo);
 		journalDetailBean.setJournalDescription(journalDescription);
-
+		System.out.println("journalDetailBean :"+journalDetailBean);
 		businessService.modifyJournalDetail(journalDetailBean);
 
 	}
-//        여기 modify 인데 리턴값이 있고 그 런턴을 반환하지도 않음 이상함(choi)
+//        여기 modify 인데 리턴값이 있고 그 런턴을 반환하지도 않음 이상함(choi), 인정, 뭐다 쓸려고 해놨을까?
 
 }
