@@ -917,22 +917,29 @@
 
         // 분개 보기
         function showJournalGrid(slipNo) { //slip rowid 선택한 전표행이다
+                                            //여기 로직 너무 수상함, rodata2가 콘솔에 찍으면 초기화 안된 상태임, debugger모드를 통해 콘솔로 찍어보면 제대로나옴, 왜지? ajax통신을 비동기식으로 한 이유는? 왜?
             // show loading message
             console.log("showJournalGrid(" + slipNo + ") 실행");
-            rowData2 = [];
 
+                        rowData2 = [];
+
+            console.log("저기",rowData2);
             var journalObj = {
                 "journalNo"        : "Total", //이부분이 분개번호
                 "leftDebtorPrice"  : 0,  //차변 금액
                 "rightCreditsPrice": 0,  //대변 금액
                 "status"           : ""
             };
+            var totalObject = $.extend(true, {}, journalObj);//데이터를 합치는 것, 원래 배열의 값을 유지하기 위해 true 인자를 넣는다.?????
 
-            var totalObject = $.extend(true, {}, journalObj);
+            console.log("요기", rowData2);
+            console.log("여기",totalObject);
             rowData2.push(totalObject);
             console.log(rowData2);
 
-            if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {
+
+            if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {//내가 선택한 로우의 전표번호가 NEW가 아니면 실행
+                console.log("김승현")
                 $.ajax({
                     type    : "GET",
                     async   : false,
@@ -941,17 +948,20 @@
                         "slipNo": slipNo
                     },
                     dataType: "json",
-                    success : function (jsonObj) {//선택한 전표에 등록된 분개정보
+                    success : function (jsonObj) {//선택한 전표에 등록된 분개정보값 다 가져와서 rowData2에 푸쉬함
 
-
+/*debugger*/
                         console.log("@@@@@@@@@@@@jsobObj : " + JSON.stringify(jsonObj));
                         jsonObj.forEach(function (element) {
+                                console.log("바보",element)
                                 rowData2.push(element);
                             }
+
                         );
+                        console.log("rowData2",rowData2)
 
 
-                        jsonObj.forEach(function (element, index) {
+                        jsonObj.forEach(function (element, index) {//element의 journalDetailList bean을 콘솔창에 반복출력해봄, 어디쓰는진 아직 모르겠음
 
 
                             $.ajax({
@@ -963,15 +973,16 @@
                                 },
                                 dataType: "json",
                                 success : function (jsonObj) {
-
                                     element.journalDetailList = jsonObj;
                                 }
                             });
+                            console.log("element",element.journalDetailList);
                         });
+
                     }
                 });
-            } else {
-
+            } else {//내가 선택한 로우의 전표번호가 NEW 일때 실행
+                console.log("NEW전표번호 생성")
                 var journalObj = { //분개1 생성
                     "journalNo"        : NEW_JOURNAL_PREFIX + 1, //이부분이 분개번호 NEW_JOURNAL_PREFIX = NEW_SLIP_NO + "JOURNAL"
                     "balanceDivision"  : "차변",
@@ -992,7 +1003,9 @@
                 rowData2.push(newJournal2);
             }
 
-            gridOptions2.api.setRowData(rowData2);
+
+
+            gridOptions2.api.setRowData(rowData2);//rowData2를 gridOptions2에 세팅, 그다음 computeJournalTotal메서드 실행
             computeJournalTotal();
         }
 
@@ -1000,7 +1013,7 @@
         var accountGrid;
         var gridOptionsAccount;
 
-        function createAccountGrid() { //분개의 계정과목 왼쪽 부모그리드 생성
+        function createAccountGrid() { //계정 코드 조회 모달창 내부의 그리드 만드는 메서드임
             rowData = [];
             var columnDefs1 = [
                 {
@@ -1012,14 +1025,14 @@
             gridOptionsAccount = {
                 columnDefs       : columnDefs1,
                 rowSelection     : 'single', //row는 하나만 선택 가능
-                defaultColDef    : {editable: false}, // 정의하지 않은 컬럼은 자동으로 설정
+                defaultColDef    : {editable: false}, // 정의하지 않은 컬럼은 자동으로 설정 //수정할 수 없도록 해둔거임
                 onGridReady      : function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
                     event.api.sizeColumnsToFit();
                 },
                 onGridSizeChanged: function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리
                     event.api.sizeColumnsToFit();
                 },
-                onRowClicked     : function (event) {
+                onRowClicked     : function (event) {//로우 누르는 순간 showAccountDetail 메서드에 매개변수 전달해서 실행
                     console.log("Row선택");
                     console.log(event.data);
                     selectedRow = event.data;
@@ -1105,6 +1118,7 @@
 
 
         function showAccountDetail(code) { //code 에 selectedRow["accountInnerCode"] 값 들어감
+            console.log("accountInnerCode", code);
             $.ajax({
                 type    : "GET",
                 url     : "${pageContext.request.contextPath}/operate/detailaccountlist",
@@ -1428,21 +1442,28 @@
         /*분개 합계 계산*/
 
         function computeJournalTotal() {
-            console.log("computeJournalTotal 실행");
-            var totalIndex = (gridOptions2.api.getDisplayedRowCount()) - 1;
 
+            console.log("computeJournalTotal 실행");
+            var totalIndex = (gridOptions2.api.getDisplayedRowCount())-1; //분개 그리드의 총 행 갯수를 가져오고 -1을 한다, -1을 하는 이유는 Total 값 가져와야됨
+            console.log("totalIndex",totalIndex)
 
             //표시된 행의 총 수를 반환합니다.
             var totalRow = gridOptions2.api.getDisplayedRowAtIndex(totalIndex);
+
+            console.log("totalRow",totalRow)
             console.log("totalRow :" + JSON.stringify(totalRow.data));
             //지정된 인덱스에 표시된 RowNode를 반환합니다. 즉 마지막 total의 정보를 담고있음
             var leftDebtorTotal = 0;
             var rightCreditsTotal = 0;
 
             gridOptions2.api.forEachNode(function (node, index) {
+
                 console.log(node);
+                console.log(node.journalNO);
+                console.log(parseInt(node.data.leftDebtorPrice));
+                console.log(parseInt(node.data.rightCreditsPrice));
                 if (node != totalRow) {
-                    if (node.journalNO != "Total") {
+                    if (node.journalNO != "Total") { //node.journalNO는 애초에 undefined인데? 그냥 없는게 나은 코드임
                         leftDebtorTotal += parseInt(node.data.leftDebtorPrice);
                         rightCreditsTotal += parseInt(node.data.rightCreditsPrice);
                     }
@@ -1450,6 +1471,10 @@
             });
             totalRow.setDataValue('leftDebtorPrice', leftDebtorTotal);
             totalRow.setDataValue('rightCreditsPrice', rightCreditsTotal);
+            debugger
+            console.log(totalRow.data.leftDebtorPrice);
+            console.log(totalRow.data.rightCreditsPrice);
+            console.log(totalRow);
         }
 
         // 거래처 그리드 생성
