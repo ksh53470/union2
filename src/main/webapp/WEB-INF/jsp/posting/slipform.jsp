@@ -120,7 +120,7 @@
             createjournalDetailGrid();
             createCodeGrid();
             showSlipGrid();                //시작하자마자 이번달 전표정보 보이게 해놓음 -> SlipController.findRangedSlipList 실행됨
-            createAccountGrid();
+            createAccountGrid();//계정 코드 조회 모달창 내부의 그리드 만드는 메서드임
             showAccount();
             createCustomerCodeGrid();
             createAccountDetailGrid()
@@ -131,17 +131,18 @@
 
         });
         window.addEventListener("keydown", (key) => {
-            if (key.keyCode == 113) {
+            console.log(key);
+            if (key.keyCode == 113) {//keyCode 113번은 F2키를 뜻한다.
                 addslipRow();
-            } else if (key.keyCode == 114) {
+            } else if (key.keyCode == 114) {//keyCode 114번은 F3키를 뜻한다.
                 saveSlip();
-            } else if (key.keyCode == 115) {
+            } else if (key.keyCode == 115) {//keyCode 115번은 F4키를 뜻한다.
                 confirmSlip();
             }
         })
 
 
-        var NEW_SLIP_NO = "NEW"; // 전표 이름.
+        var NEW_SLIP_NO = "NEW"; // 전표 이름. 초기화 개념
         var NEW_JOURNAL_PREFIX = NEW_SLIP_NO + "JOURNAL"; // 분개 앞에 오는 이름
         var REQUIRE_ACCEPT_SLIP = "작성중";
 
@@ -170,9 +171,9 @@
             console.log("formatNumber(number) 실행");
             // this puts commas into the number eg 1000 goes to 1,000,
             // i pulled this from stack overflow, i have no idea how it works
-            return Math.floor(number)
-                .toString()
-                .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+            return Math.floor(number)//floor함수는 항상 반올림한다는 뜻
+                .toString()//글자로 바꾸고
+                .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');//
 
             //Math.floor(Number(number).toLocaleString())
         }
@@ -199,8 +200,9 @@
 
         // Map 내의 객체들 Disabled/Enabled
         function enableElement(obj) {
-            console.log("enableElement(obj) 실행");
 
+            console.log("enableElement(obj) 실행");
+            console.log(obj);
             for (var key in obj)
 
                 $(key).prop("disabled", !obj[key]);  //obj[key]부분은 true false밖에 올수없다.
@@ -303,6 +305,7 @@
         // 전표 추가 버튼 이벤트
         function addslipRow() {
             console.log("addslipRow() 실행");
+            console.log(accountPeriodNo);
             $.ajax({
                 type    : "GET",
                 url     : "${pageContext.request.contextPath}/posting/accountingsettlementstatus",
@@ -312,6 +315,7 @@
                 },
                 dataType: "json",
                 success : function (jsonObj) {
+                    console.log("jsonObj",jsonObj);
                     console.log(accountPeriodNo);
                     addslipShow();
                     console.log(jsonObj.accountingSettlementStatus);
@@ -622,6 +626,7 @@
                             dataType: "json",
                             async   : false,
                             success : function (jsonObj) {
+                                console.log(jsonObj);
                                 //jsonObj에는 account_control_code , account_control_name , account_control_type , account_control_description 만 가지고옴
                                 jsonObj.forEach(function (element, index) { //accountControl은 map의 key 이름, accountControlList가 들어있음
                                     element['journalNo'] = selectedJournalRow['journalNo'];  // accountControlList에는 journalNo가 없어서 셋팅 후 아래 그리드옵션에 할당
@@ -921,7 +926,7 @@
             // show loading message
             console.log("showJournalGrid(" + slipNo + ") 실행");
 
-                        rowData2 = [];
+            rowData2 = [];
 
             console.log("저기",rowData2);
             var journalObj = {
@@ -1036,7 +1041,7 @@
                     console.log("Row선택");
                     console.log(event.data);
                     selectedRow = event.data;
-                    showAccountDetail(selectedRow["accountInnerCode"]);
+                    showAccountDetail(selectedRow["accountInnerCode"]);//계정과목 번호 ex)0218-0230값 전달
                 }
             }
 
@@ -1056,9 +1061,12 @@
             });
         }
 
-        <!-- 분개상세모달창시작 -->
+        <!-- 분개상세모달창시작 --> <!-- 분개상세모달 아님, 계정코드 조회 시 나오는 오른쪽 그리드 -->
 
         var gridOpionsAccountDetail
+
+
+
 
         function createAccountDetailGrid() {
             console.log("createAccountDetailGrid() 실행");
@@ -1080,13 +1088,13 @@
                 onGridSizeChanged  : function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리
                     event.api.sizeColumnsToFit();
                 },
-                <!-- 분개상세모달창 -->
-                onCellDoubleClicked: function (event) {
+
+                onCellDoubleClicked: function (event) {//오른쪽 그리드 로우 더블클릭 시 모달창 사라지고 분개 그리드의 값을 클릭했던 로우 값으로 바꾼다.
                     $("#accountGridModal").modal('hide');
                     gridOptions2.api.applyTransaction([selectedJournalRow['accountCode'] = event.data["accountInnerCode"]]);
                     gridOptions2.api.applyTransaction([selectedJournalRow['accountName'] = event.data["accountName"]]);
                     console.log("event.data[accountInnerCode] :" + event.data["accountInnerCode"]);
-                    $.ajax({ //여기서부터는 분개상세
+                    $.ajax({
                         type    : "GET",
                         url     : "${pageContext.request.contextPath}/operate/accountcontrollist",
                         data    : {
@@ -1099,15 +1107,15 @@
 
 
                             console.log(selectedJournalRow['journalNo']);
-
-                            jsonObj['accountControl'].forEach(function (element, index) { //분개상세 key값
+                            console.log(selectedJournalRow);
+                            /*jsonObj['accountControl'].forEach(function (element, index) { //분개상세 key값
                                 element['journalNo'] = selectedJournalRow['journalNo']; //요소추가?
                             })
                             console.log(jsonObj['accountControl']);
-                            gridOptions2.api.applyTransaction([selectedJournalRow['journalDetailList'] = jsonObj['accountControl']]);
+                            gridOptions2.api.applyTransaction([selectedJournalRow['journalDetailList'] = jsonObj['accountControl']]);*/ //돌아가지 않는 로직임,
 
                             console.log("selectedJournalRow :" + selectedJournalRow);
-                            gridOptions2.api.redrawRows(); //행 다시 그리기
+                            gridOptions2.api.redrawRows(); //행 다시 그리기  -- 굳이 다시 그린 이유는? 바로 위에 지운 로직이랑 관계가 있는 건가?
                         }
                     });
                 }
@@ -1115,8 +1123,6 @@
             accountDetailGrid = document.querySelector('#accountDetailGrid');
             new agGrid.Grid(accountDetailGrid, gridOpionsAccountDetail); //div 태그에 붙임
         }
-
-
         function showAccountDetail(code) { //code 에 selectedRow["accountInnerCode"] 값 들어감
             console.log("accountInnerCode", code);
             $.ajax({
@@ -1307,7 +1313,7 @@
         var rowDataCode;
         var gridOpions6;
 
-        function createCustomerCodeGrid() {
+        function createCustomerCodeGrid() {//
             rowDataCode = [];
             var columnDefs = [
                 {headerName: "사업장 코드", field: "workplaceCode", width: 100, hide: true},
@@ -1471,7 +1477,7 @@
             });
             totalRow.setDataValue('leftDebtorPrice', leftDebtorTotal);
             totalRow.setDataValue('rightCreditsPrice', rightCreditsTotal);
-            debugger
+            /*debugger*/
             console.log(totalRow.data.leftDebtorPrice);
             console.log(totalRow.data.rightCreditsPrice);
             console.log(totalRow);

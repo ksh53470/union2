@@ -37,6 +37,7 @@ public class AccountSubjectController {
 
     @GetMapping("/accountcontrollist")
     public ArrayList<AccountControlBean> findAccountControlList(@RequestParam(value="accountCode", required=false) String accountCode) {
+        System.out.println("accountCode :"+accountCode);
 
             ArrayList<AccountControlBean> accountControlList = systemService.findAccountControlList(accountCode);
 

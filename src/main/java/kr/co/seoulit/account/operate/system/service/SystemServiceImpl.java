@@ -82,7 +82,7 @@ public class SystemServiceImpl implements SystemService{
 
         	ArrayList<AccountControlBean> accountControlList = null;
         	accountControlList = accountDAO.selectAccountControlList(accountCode);
-
+		System.out.println("accountControlList :" + accountControlList);
         return accountControlList;
     }
 

@@ -175,6 +175,8 @@ public class SlipController {
         json.put("errorCode", 0);
         json.put("errorMsg", "데이터 조회 성공");
 
+        System.out.println("json :" +json);
+
         businessService.findAccountingSettlementStatus(params);
 
 
