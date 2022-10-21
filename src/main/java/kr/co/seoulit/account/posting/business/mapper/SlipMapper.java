@@ -3,6 +3,7 @@ package kr.co.seoulit.account.posting.business.mapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.account.posting.business.to.AccountingSettlementStatusBean;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.seoulit.account.posting.business.to.SlipBean;
@@ -24,5 +25,5 @@ public interface SlipMapper {
 	
     public ArrayList<SlipBean> selectSlip(String slipNo);
         
-    public HashMap<String, Object> selectAccountingSettlementStatus(HashMap<String, Object> param);
+    public ArrayList<AccountingSettlementStatusBean> selectAccountingSettlementStatus(HashMap<String, Object> param);
 }

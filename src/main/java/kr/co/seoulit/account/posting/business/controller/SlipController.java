@@ -78,6 +78,8 @@ public class SlipController {
         Gson gson = new Gson();
         SlipBean slipBean = gson.fromJson(slipObj, SlipBean.class);
         JSONArray journalObjs = JSONArray.fromObject(journalObj);
+        System.out.println("slipBean :"+slipBean);
+        System.out.println("journalObjs :"+journalObjs);
         /*
          * slipBean.setReportingEmpCode(request.getSession().getAttribute("empCode").
          * toString()); // beanCreator에서 셋팅하는데 또함..(dong) //실제 결제신청하는 사람 정보로 바꿔주는 소스임 이름
@@ -98,12 +100,15 @@ public class SlipController {
             journalBean.setSlipNo(slipBean.getSlipNo()); //slipNo을 journalBean에 값이 없어서 세팅해줌
             journalBeans.add(journalBean);
 
+
         }
+        System.out.println("journalBeans :"+journalBeans);
         businessService.registerSlip(slipBean, journalBeans);
     }
 
     @GetMapping("/slipremoval")
     public void removeSlip(@RequestParam String slipNo) {
+        System.out.println("slipNo :"+slipNo);
         businessService.removeSlip(slipNo);
 
     }
@@ -178,6 +183,7 @@ public class SlipController {
         System.out.println("json :" +json);
 
         businessService.findAccountingSettlementStatus(params);
+
 
 
         return params;

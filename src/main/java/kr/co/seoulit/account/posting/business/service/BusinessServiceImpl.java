@@ -3,6 +3,7 @@ package kr.co.seoulit.account.posting.business.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.account.posting.business.to.AccountingSettlementStatusBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,8 +118,8 @@ public class BusinessServiceImpl implements BusinessService {
     public void registerSlip(SlipBean slipBean, ArrayList<JournalBean> journalBeans) {
         System.out.println("AppServiceImpl_addSlip 시작");
 
-        StringBuffer slipNo = new StringBuffer();
-        int sum = 0;
+        StringBuffer slipNo = new StringBuffer();//글자 합쳐주기 위해 stringbuffer 사용
+    //    int sum = 0;
 
         String slipNoDate = slipBean.getReportingDate().replace("-", ""); // 2021-10-27 -> 20211027
         System.out.println("AppServiceImpl_addSlip 시작");
@@ -129,17 +130,47 @@ public class BusinessServiceImpl implements BusinessService {
         slipNo.append(code.substring(code.length() - 5)); // 00001 10이상 넘어가는숫자들 처리
         System.out.println("slipNo: " + slipNo.toString());
         slipBean.setSlipNo(slipNo.toString()); //20200118SLIP00001
+/*        slipBean.setApprovalEmpCode("admin");
+        slipBean.setApprovalDate("2022-10-21");*/
+        System.out.println("slipBean :"+slipBean);
+        System.out.println("테스트용 다찍기");
+        System.out.println(slipBean.getSlipNo());
+        System.out.println(slipBean.getAccountPeriodNo());
+        System.out.println(slipBean.getDeptCode());
+        System.out.println(slipBean.getSlipType());
+        System.out.println(slipBean.getExpenseReport());
+        System.out.println(slipBean.getReportingEmpCode());
+        System.out.println(slipBean.getReportingDate());
+        System.out.println(slipBean.getSlipStatus());
+        System.out.println(slipBean.getApprovalEmpCode());
+        System.out.println(slipBean.getApprovalDate());
+        System.out.println("---------------");
+        System.out.println(journalBeans);
+
         slipDAO.insertSlip(slipBean);
+
+        String journalNo = journalDAO.selectJournalName(slipBean.getSlipNo());
+        int journalNum = Integer.parseInt(journalNo.substring(journalNo.length() - 1));
         for (JournalBean journalBean : journalBeans) {
-            String journalNo = journalDAO.selectJournalName(slipBean.getSlipNo());
+
+            System.out.println("줘널넘버:"+journalNo);
+            //journalBean.setSlipNo(slipBean.getSlipNo());
+            System.out.println(journalNo.substring(journalNo.length()-1));
+
+            journalNum = journalNum+1;
+            System.out.println("줘널넘 :"+journalNum);
+
             journalBean.setJournalNo(journalNo);
-            journalDAO.insertJournal(journalBean);
+
+            System.out.println("줘널빈 :"+journalBean);
+
+            /*journalDAO.insertJournal(journalBean);
 
             if (journalBean.getJournalDetailList() != null)
                 for (JournalDetailBean journalDetailBean : journalBean.getJournalDetailList()) { //분개상세항목들
                     journalDetailBean.setJournalNo(journalNo); //분개번호
                     journalDAO.insertJournalDetailList(journalDetailBean);
-                }
+                }*/
         }
     }
 
@@ -152,8 +183,10 @@ public class BusinessServiceImpl implements BusinessService {
             System.out.println("removeSlip@@@@ :" + journal.getJournalNo());
         }
         slipDAO.deleteSlip(slipNo);
+
         journalDAO.deleteJournalAll(slipNo);
         for (JournalBean journal : list) {
+            System.out.println("journal delete:"+journal.getJournalNo());
             journalDAO.deleteJournalDetail(journal.getJournalNo());
         }
 
@@ -214,10 +247,13 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public HashMap<String, Object> findAccountingSettlementStatus(HashMap<String, Object> params) {
+    public ArrayList<AccountingSettlementStatusBean> findAccountingSettlementStatus(HashMap<String, Object> params) {
         // TODO Auto-generated method stub
 
-        return slipDAO.selectAccountingSettlementStatus(params);
+        slipDAO.selectAccountingSettlementStatus(params);
+        System.out.println(params);
+        System.out.println("찾아라 : "+(ArrayList<AccountingSettlementStatusBean>)params.get("ResultCursor"));
+        return (ArrayList<AccountingSettlementStatusBean>)params.get("ResultCursor");
 
     }
 
