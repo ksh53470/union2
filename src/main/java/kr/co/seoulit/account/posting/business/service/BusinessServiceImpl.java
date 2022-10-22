@@ -149,26 +149,54 @@ public class BusinessServiceImpl implements BusinessService {
 
         slipDAO.insertSlip(slipBean);
 
-        String journalNo = journalDAO.selectJournalName(slipBean.getSlipNo());
-        int journalNum = Integer.parseInt(journalNo.substring(journalNo.length() - 1));
+        String journalSplitNo = journalDAO.selectJournalName(slipBean.getSlipNo());
+
+        //StringBuffer journalFinalNum = new StringBuffer();
+
+
+        String journalFirstNum = journalSplitNo.substring(0, journalSplitNo.length()-1);//:20221022SLIP00003JOURNAL
+        //journalFinalNum.append(journalFirstNum);
+
+
+        int journalLastNum = Integer.parseInt(journalSplitNo.substring(journalSplitNo.length() - 1)); //
+
         for (JournalBean journalBean : journalBeans) {
 
-            System.out.println("줘널넘버:"+journalNo);
-            //journalBean.setSlipNo(slipBean.getSlipNo());
-            System.out.println(journalNo.substring(journalNo.length()-1));
+            journalBean.setSlipNo(slipBean.getSlipNo());
+            System.out.println(journalSplitNo.substring(journalSplitNo.length()-1));
 
-            journalNum = journalNum+1;
-            System.out.println("줘널넘 :"+journalNum);
+            journalLastNum = journalLastNum+1;
+
+            System.out.println("줘널넘 :"+journalLastNum);
+
+            String lastNo = String.valueOf(journalLastNum);
+
+            String journalNo = journalFirstNum + lastNo;
+
+
+            System.out.println("요기요기");
+            System.out.println(lastNo);
+            System.out.println(journalNo);
+
 
             journalBean.setJournalNo(journalNo);
 
             System.out.println("줘널빈 :"+journalBean);
 
-            /*journalDAO.insertJournal(journalBean);
+            journalDAO.insertJournal(journalBean);
+            journalDAO.insertJournalDetail();
+            ArrayList<JournalBean> journalBeans1 = journalDAO.se;
 
-            if (journalBean.getJournalDetailList() != null)
+            System.out.println(journalBean.getSlipNo());
+
+            //   journalDAO.selectJournalDetailList(journalNo);
+         //  journalDAO.selectJournalList(slipBean.getSlipNo());
+            System.out.println("journalBean.getJournalDetailList :" +journalBean.getJournalDetailList());
+        /*    if (journalBean.getJournalDetailList() != null)
+
                 for (JournalDetailBean journalDetailBean : journalBean.getJournalDetailList()) { //분개상세항목들
                     journalDetailBean.setJournalNo(journalNo); //분개번호
+                    System.out.println("journalDetailBean :" +journalDetailBean);
                     journalDAO.insertJournalDetailList(journalDetailBean);
                 }*/
         }
