@@ -132,6 +132,10 @@ public class BusinessServiceImpl implements BusinessService {
         slipDAO.insertSlip(slipBean);
         for (JournalBean journalBean : journalBeans) {
             String journalNo = journalDAO.selectJournalName(slipBean.getSlipNo());
+
+            System.out.println("전표번호" +slipBean.getSlipNo());
+            journalBean.setSlipNo(slipBean.getSlipNo());
+
             journalBean.setJournalNo(journalNo);
             journalDAO.insertJournal(journalBean);
 
