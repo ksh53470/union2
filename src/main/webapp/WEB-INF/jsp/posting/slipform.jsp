@@ -758,9 +758,12 @@
                         console.log(" JournalTotalObj.push(node.data2) :" + JSON.stringify(JournalTotalObj));
                     }
                 });
+                debugger
                 console.log("Ajax 통신 시작")
+                console.log(selectedSlipRow['slipNo']);
+                console.log(NEW_SLIP_NO);
                 if (selectedSlipRow['slipNo'] == NEW_SLIP_NO) { //선택된 로우가 new면
-
+                    console.log("NEW 전표입력")
                     $.ajax({
                         type    : "POST",
                         url     : "${pageContext.request.contextPath}/posting/registerslip",
@@ -771,12 +774,14 @@
                         },
                         async   : false,		// 동기식   // 비동기식으로할경우 아래 showslipgrid에서 값을 못불러올수있다.
                         dataType: "json",
-                        success : function () { //return 값이 필요 없음(choi)
+                        complete : function () { //return 값이 필요 없음(choi)success 왜안됨?
+                            console.log("새 전표 저장 완료")
                             enableElement({"#addSlip": true});
                             location.reload();
                         }
                     });
                 } else if (selectedSlipRow['slipNo'] != NEW_SLIP_NO) { //기존 저장 후 수정 및 반려 후 저장
+                    console.log("기존 전표입력")
                     var JournalTotalObj2 = [];
                     gridOptions2.api.forEachNode(function (node, index) {
                         gridOptions2.api.applyTransaction([node.data["status"] = "update"]);

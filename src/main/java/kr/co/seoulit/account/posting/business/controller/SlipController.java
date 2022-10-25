@@ -104,6 +104,7 @@ public class SlipController {
         }
         System.out.println("journalBeans :"+journalBeans);
         businessService.registerSlip(slipBean, journalBeans);
+        System.out.println("컨트롤러 끝");
     }
 
     @GetMapping("/slipremoval")

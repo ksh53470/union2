@@ -144,6 +144,14 @@
 		
 		 ]]>
 		 </update>
+
+	<select id="selectJournalDetail" parameterType="kr.co.seoulit.account.posting.business.to.JournalBean" resultType="kr.co.seoulit.account.posting.business.to.JournalDetailBean">
+		<![CDATA[
+			select * from journal where JOURNAL_NO = #{journalNo}
+		]]>
+		 </select>
+
+
 		 <insert id="insertJournalDetailList" parameterType="kr.co.seoulit.account.posting.business.to.JournalDetailBean">
 		<![CDATA[
 			

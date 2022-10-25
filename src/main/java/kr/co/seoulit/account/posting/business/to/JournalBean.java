@@ -22,7 +22,4 @@ public class JournalBean extends BaseBean {
     private String accountPeriodNo;
     private List<JournalDetailBean> journalDetailList;
 
-    
-
-
 }

@@ -2,6 +2,7 @@ package kr.co.seoulit.account.posting.business.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import kr.co.seoulit.account.posting.business.to.AccountingSettlementStatusBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,20 +182,16 @@ public class BusinessServiceImpl implements BusinessService {
 
             journalBean.setJournalNo(journalNo);
 
+
             System.out.println("줘널빈 :"+journalBean);
 
-            journalDAO.insertJournal(journalBean);
-            journalDAO.insertJournalDetail();
-            ArrayList<JournalBean> journalBeans1 = journalDAO.se;
-
             System.out.println(journalBean.getSlipNo());
+            journalDAO.insertJournal(journalBean);
 
-            //   journalDAO.selectJournalDetailList(journalNo);
-         //  journalDAO.selectJournalList(slipBean.getSlipNo());
-            System.out.println("journalBean.getJournalDetailList :" +journalBean.getJournalDetailList());
-        /*    if (journalBean.getJournalDetailList() != null)
 
-                for (JournalDetailBean journalDetailBean : journalBean.getJournalDetailList()) { //분개상세항목들
+      /*     if (journalBean.getJournalDetailList() != null)
+
+                for (JournalDetailBean journalDetailBean : journalBean.getJournalDetailList()) { //분개상세항목들 .getJournalDetailList()
                     journalDetailBean.setJournalNo(journalNo); //분개번호
                     System.out.println("journalDetailBean :" +journalDetailBean);
                     journalDAO.insertJournalDetailList(journalDetailBean);
