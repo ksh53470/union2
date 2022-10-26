@@ -132,7 +132,8 @@
 		gridOptions.api.setRowData([]);
 		$.ajax({
 					type : "POST",
-					url : "${pageContext.request.contextPath}/operate/allworkorkplacelist",
+					/*url : "${pageContext.request.contextPath}/operate/allworkorkplacelist",*/
+					url : "${pageContext.request.contextPath}/operate/allworkplacelist",
 					data : {
 					},
 					dataType : "json",

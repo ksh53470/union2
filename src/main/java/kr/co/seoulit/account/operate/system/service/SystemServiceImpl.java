@@ -81,6 +81,7 @@ public class SystemServiceImpl implements SystemService{
     public ArrayList<AccountControlBean> findAccountControlList(String accountCode) {
 
         	ArrayList<AccountControlBean> accountControlList = null;
+		System.out.println("accountCode :" +accountCode);
         	accountControlList = accountDAO.selectAccountControlList(accountCode);
 		System.out.println("accountControlList :" + accountControlList);
         return accountControlList;

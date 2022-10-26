@@ -35,6 +35,7 @@ public class BusinessServiceImpl implements BusinessService {
         Boolean findSearch;
 
         String journalDetailNo = journalDetailBean.getJournalDetailNo();
+        System.out.println("journalDetailNo :" +journalDetailNo);
         String accountControlType = journalDetailBean.getAccountControlType();
         // "==" 비교 연산자는 주소값을 비교하고
         // equals() 메소드는 내용 자체 즉 데이터 값을 비교한다
@@ -47,9 +48,11 @@ public class BusinessServiceImpl implements BusinessService {
 
         journalDAO.updateJournalDetail(journalDetailBean); //분개번호로 내용만 업데이트함
         if (findSelect || findSearch) {
+        System.out.println("테스트1");
             dName = journalDAO.selectJournalDetailDescriptionName(journalDetailNo);
+        System.out.println("테스트2");
         }
-        System.out.println("dName :"+dName);//널값나옴, 이건 왜 해놨을까?
+        System.out.println("dName :"+dName);
 
         return dName;
     }

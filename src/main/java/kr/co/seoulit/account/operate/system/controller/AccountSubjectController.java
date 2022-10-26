@@ -40,7 +40,7 @@ public class AccountSubjectController {
         System.out.println("accountCode :"+accountCode);
 
             ArrayList<AccountControlBean> accountControlList = systemService.findAccountControlList(accountCode);
-
+        System.out.println("accountControlList :"+accountControlList);
 
         return accountControlList;
     }
@@ -49,7 +49,7 @@ public class AccountSubjectController {
 
         System.out.println("accountName :"+accountName);
     	ArrayList<AccountBean> accountList = systemService.findAccountListByName(accountName);
- 
+        System.out.println("accountList :" +accountList);
         return accountList;
     }
     @GetMapping("/parentaccountlist")

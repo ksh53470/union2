@@ -103,13 +103,16 @@
             $("#confirm").click(confirmSlip);         // 결재 버튼
             $("#Accountbtn").click(searchAccount);   // 모달에서의 계정 검색 버튼
             $("#accountCode").keydown(function (key) { //모달창 안에서 계정과목 입력해서 찾아주는 메서드, 실행안됨 고쳐야됨, 누르는 순간 searchAccount 메서드 실행됨, 그 이후가 안되는듯
-                if (key.keyCode == 13) {
+                if (key.code == 'Enter') {
                     searchAccount();
                 }
             })
             $("#searchCodebtn").click(searchCode); // 모달에서의 부서 검색 버튼
-
-
+            $("#searchCode").keydown(function (key) { //모달창 안에서 계정과목 입력해서 찾아주는 메서드, 실행안됨 고쳐야됨, 누르는 순간 searchAccount 메서드 실행됨, 그 이후가 안되는듯
+                if (key.code == 'Enter') {
+                    searchCode();
+                }
+            })
             /* DatePicker  */
             $('#from').val(today.substring(0, 8) + '01');//오늘날짜에서 맨뒤 두자리인 날짜는 01로 지정되도록 값을 세팅함, 초기값을 주는 형식, 날짜는 무조건 해당 달의 1일로 나타나게해둠
             $('#to').val(today.substring(0, 10));         // 오늘 날짜의 년-월-일, 마찬가지로 초기값을 주는거임
@@ -117,7 +120,6 @@
             <!-- 아래 모든 메서드들을 DOM 객체가 생성되는 시점에 실행함, 하나하나 다 볼것, 그리드도 여기서 만듬 -->
             createSlip();
             createJournal();
-            createjournalDetailGrid();
             createCodeGrid();
             showSlipGrid();                //시작하자마자 이번달 전표정보 보이게 해놓음 -> SlipController.findRangedSlipList 실행됨
             createAccountGrid();//계정 코드 조회 모달창 내부의 그리드 만드는 메서드임
@@ -132,11 +134,11 @@
         });
         window.addEventListener("keydown", (key) => {
             console.log(key);
-            if (key.keyCode == 113) {//keyCode 113번은 F2키를 뜻한다.
+            if (key.code == 'F2') {//keyCode 113번은 F2키를 뜻한다.
                 addslipRow();
-            } else if (key.keyCode == 114) {//keyCode 114번은 F3키를 뜻한다.
+            } else if (key.code == 'F3') {//keyCode 114번은 F3키를 뜻한다.
                 saveSlip();
-            } else if (key.keyCode == 115) {//keyCode 115번은 F4키를 뜻한다.
+            } else if (key.code == 'F4') {//keyCode 115번은 F4키를 뜻한다.
                 confirmSlip();
             }
         })
@@ -149,7 +151,6 @@
         //그리드 선택자
         var slipGrid = "#slipGrid";
         var journalGrid = "#journalGrid";
-        var journalDetailGrid;
         var accountGrid = "#accountGrid";
         var customerCodeModalGrid = "#customerCodeModalGrid";
 
@@ -439,6 +440,7 @@
         var gridOptions2 //jouranlGrid 옵션
         var journalGrid;
         var selectedJournalRow;
+        var detailGridApi;
 
         //Journal 생성
         //먼저 gridOptions 칼럼에 들어갈 값과 함수들 선언. 결국 그리드에 값 넣고 띄우려면 aggrid.grid(grid 태그 id값, gridOptions) 를 실행하면 된다.
@@ -543,7 +545,7 @@
                             console.log("onCellDoubleClicked 실행");
                             var journalNo = event.data["journalNo"];
                             console.log("journalNo : "+journalNo);
-                            var detailGridApi = gridOptions2.api.getDetailGridInfo('detail_' + event.data["journalNo"]); //주어진 값에 detail접두사를 붙여 상세 그리드의 ID를 생성한다.
+                            detailGridApi = gridOptions2.api.getDetailGridInfo('detail_' + journalNo); //주어진 값에 detail접두사를 붙여 상세 그리드의 ID를 생성한다.
                             console.log("detailGridApi : "+detailGridApi);
                             console.log(detailGridApi);
 
@@ -626,13 +628,15 @@
                             dataType: "json",
                             async   : false,
                             success : function (jsonObj) {
-                                console.log(jsonObj);
+                                console.log(selectedJournalRow['journalDetailList']);
+                                console.log("바꾼 데이터",jsonObj);
+                                console.log(JSON.stringify(jsonObj));
                                 //jsonObj에는 account_control_code , account_control_name , account_control_type , account_control_description 만 가지고옴
                                 jsonObj.forEach(function (element, index) { //accountControl은 map의 key 이름, accountControlList가 들어있음
                                     element['journalNo'] = selectedJournalRow['journalNo'];  // accountControlList에는 journalNo가 없어서 셋팅 후 아래 그리드옵션에 할당
                                 })
                                 gridOptions2.api.applyTransaction(selectedJournalRow['journalDetailList'] = jsonObj);
-
+                                console.log(selectedJournalRow['journalDetailList']);
                             }
                         });
                         Price(event);
@@ -664,7 +668,6 @@
             console.log(NEW_SLIP_NO);
             console.log(selectedJournalRow); // 셀 한번 클릭하는 순간 위애서 eventdata로 여기에 값을 넣어버림, 그래서 더블클릭하면 무조건 이 값이 들어있을 수 밖에 없게 해놈
             if (selectedSlipRow["slipNo"] !== NEW_SLIP_NO) {  //두개는 항상 다르게 되어있는데 굳이 조건식을 건 이유는?
-                $("#journalDetailGridModal").modal('show');  //분개상세그리드 모달창을 띄우도록 함, id값 검색하면 body부분에 grid하나 있음
                 //분개상세 보기
                 $.ajax({
                     type: "GET",
@@ -676,7 +679,7 @@
                     dataType: "json",
                     success : function (jsonObj) {
                         console.log(JSON.stringify(jsonObj)); //데이터 잘 들고오는지 확인
-                        gridOptions4.api.setRowData(jsonObj); //가져온 데이터를 gridOption4의 칼럼명에 맞게 하나하나 세팅해주기
+                        detailGridApi.api.setRowData(jsonObj); //가져온 데이터를 gridOption4의 칼럼명에 맞게 하나하나 세팅해주기
                     }
                 });
             }
@@ -691,6 +694,9 @@
             console.log("price(event) 실행");
             lastIndex = gridOptions2.api.getFirstDisplayedRow();  //0
             lastRow = gridOptions2.api.getRowNode(lastIndex);  // undifine  (dong)
+            console.log("lastIndex",lastIndex);
+            console.log("lastRow",lastRow)
+
 
             var sum = 0;
             if (event.data['journalNo'] != "Total") {
@@ -1184,6 +1190,7 @@
                 },
                 dataType: "json",
                 success : function (jsonObj) {
+                    console.log("계정코드 변경 후 계정과목 변경", jsonObj);
                     var accountName = jsonObj.accountName;
                     gridOptions2.api.applyTransaction([selectedJournalRow['accountName'] = accountName]);
                 },
@@ -1191,68 +1198,9 @@
             });
         }
 
-
-        //분개 상세
-
-        var selectedJournalDetail;
-        var gridOptions4;
-
-        function createjournalDetailGrid() {
-            console.log("createjournalDetailGrid() 실행");
-            rowData = [];
-            var columnDefs = [
-                {headerName: "계정 설정 속성", field: "accountControlType", width: 150, sortable: true},
-                {headerName: "분개 상세 번호", field: "journalDetailNo", width: 150, sortable: true},
-                {headerName: "-", field: "status", width: 100, hide: true},
-                {headerName: "-", field: "journalDescriptionCode", width: 100, hide: true},
-                {headerName: "분개 상세 항목", field: "accountControlName", width: 150,},
-                {headerName: "분개 상세 내용", field: "journalDescription", width: 250, cellRenderer: cellRenderer}
-            ];
-
-
-            gridOptions4 = {
-                columnDefs         : columnDefs,
-                rowSelection       : 'single', //row는 하나만 선택 가능
-                defaultColDef      : {editable: false}, // 정의하지 않은 컬럼은 자동으로 설정
-                onGridReady        : function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
-                    event.api.sizeColumnsToFit();
-                },
-                onGridSizeChanged  : function (event) { // 그리드의 사이즈가 변하면 자동으로 컬럼의 사이즈 정리
-                    event.api.sizeColumnsToFit();
-                },
-                onRowClicked       : function (event) {
-                    selectedJournalDetail = event.data;
-                    cellRenderer(event);
-                    console.log('분개 상세 선택됨');
-                },
-                onCellDoubleClicked: function (event) {
-                    console.log("onCellDoubleClicked 실행");
-                    if (event.data["accountControlType"] == "SEARCH") {
-                        $("#codeModal").modal('show');
-                    } else if (event.data["accountControlType"] == "SELECT") {
-                        gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = selectBank()]);
-
-                    } else if (event.data["accountControlType"] == "TEXT") {
-                        var str = prompt('상세내용을 입력해주세요', '');
-                        gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = str]);
-                        saveJournalDetailRow();
-                    } else {
-                        gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = selectCal()]);
-                    }
-
-                },
-                onCellChangedValue : function (event) {
-                    console.log("onCellChangedValue 실행");
-                    console.log("분개 디테일 수정 : " + event.data);
-                }
-
-            };
-            journalDetailGrid = document.querySelector('#journalDetailGrid');
-            new agGrid.Grid(journalDetailGrid, gridOptions4);
-        }
-
-        function cellRenderer(params) {  // 중복되는일이라 불필요(dong)
+      function cellRenderer(params) {  // 중복되는일이라 불필요(dong)
             console.log("cellRenderer(params) 실행");
+            console.log(params);
             var result;
             if (params.value != null){
                 result = params.value;
@@ -1261,6 +1209,7 @@
             else {
                 result = ''
             }
+            console.log(result);
             return result;
         }
 
@@ -1294,12 +1243,12 @@
                     event.api.sizeColumnsToFit();
                 },
                 onRowClicked     : function (event) {
-                    console.log("onRowClicked 실행");
+                    console.log("CodeGrid의 onRowClicked 실행");
                     var detailCodeName = event.data["detailCodeName"]
                     var detailCode = event.data["detailCode"]
                     console.log(detailCodeName);
-                    gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = detailCodeName]); //journalDescription 분개상세내용
-                    gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = detailCode]);
+                    detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescription"] = detailCodeName]); //journalDescription 분개상세내용
+                    detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = detailCode]);
                     saveJournalDetailRow();
                     gridOptions2.api.getDetailGridInfo('detail_' + selectedJournalRow); //쓰는데가 없는거같은데...
                     $("#codeModal").modal('hide');
@@ -1364,8 +1313,9 @@
                 },
                 dataType: "json",
                 success : function (jsonObj) {
-                    gridOptions5.api.setRowData(jsonObj.detailCodeList);
-
+                    console.log(jsonObj);
+                    gridOptions5.api.setRowData(jsonObj);
+                    $("#searchCode").val("");
                 },
                 async   : false
             });
@@ -1398,8 +1348,8 @@
             $(ele).change(function () {
                 console.log("$(ele).change 실행");
                 console.log($(this).val());
-                gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = $(this).children("option:selected").text()]);
-                gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = $(this).val()]);//내가 옵션에서 선택한 값을 숨겨진 journalDescriptionCode 항목에 저장해둠
+                detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescription"] = $(this).children("option:selected").text()]);
+                detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescriptionCode"] = $(this).val()]);//내가 옵션에서 선택한 값을 숨겨진 journalDescriptionCode 항목에 저장해둠
                 saveJournalDetailRow();
             })
 
@@ -1411,7 +1361,7 @@
             ele = document.createElement("input");
             ele.type = "date"
             $(ele).change(function () {
-                gridOptions4.api.applyTransaction([selectedJournalDetail["journalDescription"] = $(ele).val()]);
+                detailGridApi.api.applyTransaction([selectedJournalDetail["journalDescription"] = $(ele).val()]);
                 saveJournalDetailRow();
             })
             return ele;
@@ -1465,7 +1415,6 @@
             gridOptions2.api.forEachNode(function (node, index) {
 
                 console.log(node);
-                console.log(node.journalNO);
                 console.log(parseInt(node.data.leftDebtorPrice));
                 console.log(parseInt(node.data.rightCreditsPrice));
                 if (node != totalRow) {
@@ -1481,6 +1430,7 @@
             console.log(totalRow.data.leftDebtorPrice);
             console.log(totalRow.data.rightCreditsPrice);
             console.log(totalRow);
+            console.log("합계산 끝")
         }
 
         // 거래처 그리드 생성
@@ -1515,9 +1465,9 @@
         <input type="button" id="showPDF" value="PDF보기" class="btn btn-Light shadow-sm btnsize">
         <input type="button" id="saveSlip" value="전표 저장(F3)" class="btn btn-Light shadow-sm btnsize">
         <input type="button" id="confirm" value="결재 신청(F4)" class="btn btn-Light shadow-sm btnsize">
-
+ㅏ
     </div>
-</div>
+   </div>
 <!-- 전표 그리드 -->
 <div align="center"> <!-- 셀정렬 -->
     <div id="slipGrid" class="ag-theme-balham" style="height:250px;width:auto;"></div>
@@ -1566,24 +1516,6 @@
                              style="height: 500px; width: 100%; margin-left:5px;"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div align="center" class="modal fade" id="journalDetailGridModal" tabindex="-1" role="dialog"
-     aria-labelledby="journalDetailGridLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width:700px;">
-            <div class="modal-header">
-                <h5 class="modal-title" id="journalDetailGridLabel">분개 상세</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div align="center" id="journalDetailGrid" class="ag-theme-balham"
-                     style="width:100%;height:200px"></div>
             </div>
         </div>
     </div>
