@@ -36,4 +36,6 @@ public interface JournalMapper {
 	public void insertJournal(JournalBean journalBean);
 
 	public String selectJournalName(String slipNo);
+
+    public JournalDetailBean selectJournalDetail(JournalBean journalBean);
 }

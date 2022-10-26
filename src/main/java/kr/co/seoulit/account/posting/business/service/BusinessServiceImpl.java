@@ -2,7 +2,9 @@ package kr.co.seoulit.account.posting.business.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import kr.co.seoulit.account.posting.business.to.AccountingSettlementStatusBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,8 +138,7 @@ public class BusinessServiceImpl implements BusinessService {
         for (JournalBean journalBean : journalBeans) {
             String journalNo = journalDAO.selectJournalName(slipBean.getSlipNo());
 
-            System.out.println("전표번호" +slipBean.getSlipNo());
-            journalBean.setSlipNo(slipBean.getSlipNo());
+            journalBean.setSlipNo(slipBean.getSlipNo()); //★수정
 
             journalBean.setJournalNo(journalNo);
             journalDAO.insertJournal(journalBean);
@@ -149,7 +150,6 @@ public class BusinessServiceImpl implements BusinessService {
                 }
         }
     }
-
     @Override
     public void removeSlip(String slipNo) {
 
@@ -159,8 +159,10 @@ public class BusinessServiceImpl implements BusinessService {
             System.out.println("removeSlip@@@@ :" + journal.getJournalNo());
         }
         slipDAO.deleteSlip(slipNo);
+
         journalDAO.deleteJournalAll(slipNo);
         for (JournalBean journal : list) {
+            System.out.println("journal delete:"+journal.getJournalNo());
             journalDAO.deleteJournalDetail(journal.getJournalNo());
         }
 
@@ -221,10 +223,13 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public HashMap<String, Object> findAccountingSettlementStatus(HashMap<String, Object> params) {
+    public ArrayList<AccountingSettlementStatusBean> findAccountingSettlementStatus(HashMap<String, Object> params) {
         // TODO Auto-generated method stub
 
-        return slipDAO.selectAccountingSettlementStatus(params);
+        slipDAO.selectAccountingSettlementStatus(params);
+        System.out.println(params);
+        System.out.println("찾아라 : "+(ArrayList<AccountingSettlementStatusBean>)params.get("ResultCursor"));
+        return (ArrayList<AccountingSettlementStatusBean>)params.get("ResultCursor");
 
     }
 

@@ -3,6 +3,7 @@ package kr.co.seoulit.account.posting.business.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.account.posting.business.to.AccountingSettlementStatusBean;
 import kr.co.seoulit.account.posting.business.to.JournalBean;
 import kr.co.seoulit.account.posting.business.to.JournalDetailBean;
 import kr.co.seoulit.account.posting.business.to.SlipBean;
@@ -33,7 +34,7 @@ public interface BusinessService {
     
     public ArrayList<SlipBean> findSlipDataList(String slipDate);
 
-    public HashMap<String, Object> findAccountingSettlementStatus(HashMap<String, Object> params);
+    public ArrayList<AccountingSettlementStatusBean> findAccountingSettlementStatus(HashMap<String, Object> params);
 
     public ArrayList<SlipBean> findSlip(String slipNo);
 

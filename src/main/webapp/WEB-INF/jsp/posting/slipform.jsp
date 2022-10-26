@@ -319,7 +319,7 @@
                     console.log("jsonObj",jsonObj);
                     console.log(accountPeriodNo);
                     addslipShow();
-                    console.log(jsonObj.accountingSettlementStatus);
+                    //console.log(jsonObj.accountingSettlementStatus); jsonObj에 이런 데이터 없음, 쓸모없는 코드
 
                 }
             });
@@ -361,7 +361,7 @@
                 alert("전표 작성중이 아닙니다.\n현재상태 : " + selectedSlipRow['slipStatus']);
             } else {
 
-                if (confirmDelete()) {
+  /*              if (confirmDelete()) {
                     $.ajax({
                         type: "GET",
                         url : "${pageContext.request.contextPath}/posting/slipremoval",
@@ -384,8 +384,17 @@
 
                         }
                     });
-                }
+                }*/
+                enableElement({
+                    "#addSlip"      : true,
+                    "#deleteSlip"   : false,
+                    "#addJournal"   : false,
+                    "#deleteJournal": false,
+                    "#createPdf"    : false,
+                });
+                gridOptions.api.applyTransaction({remove: [selectedSlipRow]});
             }
+
         }
 
         function confirmDelete()//삭제 메세지
@@ -738,24 +747,29 @@
         }
 
 
-        function saveSlip(confirm) {
+        function saveSlip(confirm) {//전표저장, 현재는 잘 안돌아감
+            console.log("confirm",confirm);//내가 누른 이벤트의 정보들
             var JournalTotalObj = [];
             var slipStatus = confirm == "승인요청" ? confirm : null //기본은 null이고 confirm할때만 "승인요청"으로 바뀐다
-
+            console.log("slipStatus",slipStatus);//null값 나옴
             if (selectedSlipRow['slipStatus'] == "승인요청" || selectedSlipRow['slipStatus'] == "승인완료") {
                 alert("전표 작성중이 아닙니다.\n현재상태 : " + selectedSlipRow['slipStatus']);  //먼저 한번 걸러줌
             } else {
-                gridOptions2.api.forEachNode(function (node, index) {
+                console.log("저장 시작")
+                gridOptions2.api.forEachNode(function (node, index) {//gridOptions2의 값을 하나하나 JournalTotalObj에 담음
 
                     if (node.data.journalNo != "Total") {
                         JournalTotalObj.push(node.data); //분개노드 마지막 total 빼고 JournalTotalObj에 담음
                         console.log(" JournalTotalObj.push(node.data) :" + JSON.stringify(node.data));
-                        console.log(" JournalTotalObj.push(node.data) :" + JSON.stringify(JournalTotalObj));
+                        console.log(" JournalTotalObj.push(node.data2) :" + JSON.stringify(JournalTotalObj));
                     }
                 });
-
+                debugger
+                console.log("Ajax 통신 시작")
+                console.log(selectedSlipRow['slipNo']);
+                console.log(NEW_SLIP_NO);
                 if (selectedSlipRow['slipNo'] == NEW_SLIP_NO) { //선택된 로우가 new면
-
+                    console.log("NEW 전표입력")
                     $.ajax({
                         type    : "POST",
                         url     : "${pageContext.request.contextPath}/posting/registerslip",
@@ -766,12 +780,14 @@
                         },
                         async   : false,		// 동기식   // 비동기식으로할경우 아래 showslipgrid에서 값을 못불러올수있다.
                         dataType: "json",
-                        success : function () { //return 값이 필요 없음(choi)
+                        complete : function () { //return 값이 필요 없음(choi)success 왜안됨?
+                            console.log("새 전표 저장 완료")
                             enableElement({"#addSlip": true});
                             location.reload();
                         }
                     });
                 } else if (selectedSlipRow['slipNo'] != NEW_SLIP_NO) { //기존 저장 후 수정 및 반려 후 저장
+                    console.log("기존 전표입력")
                     var JournalTotalObj2 = [];
                     gridOptions2.api.forEachNode(function (node, index) {
                         gridOptions2.api.applyTransaction([node.data["status"] = "update"]);
@@ -803,6 +819,7 @@
                 showSlipGrid();
                 showJournalGrid(selectedSlipRow.slipNo);
             }
+            console.log("Ajax 통신 끝")
         }
 
         function confirmSlip() {

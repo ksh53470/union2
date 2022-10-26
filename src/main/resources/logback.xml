@@ -75,14 +75,14 @@
         <from>01050419741</from> <!-- SMS approve phone number -->
     </appender>
   
-  <root level="DEBUG">
+<!--  <root level="DEBUG">
       <appender-ref ref="STDOUT" />
   </root>
   <root level="INFO">
       <appender-ref ref="STDOUT" />
       <appender-ref ref="EMAIL"/>
-<!--      <appender-ref ref="SMS"/>-->
-  </root>
+&lt;!&ndash;      <appender-ref ref="SMS"/>&ndash;&gt;
+  </root>-->
 
   <logger name="LogController" additivity="false">
     <level value = "DEBUG" />
