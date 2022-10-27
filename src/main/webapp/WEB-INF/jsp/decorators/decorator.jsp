@@ -328,7 +328,7 @@
                 <nav class="navbar navbar-expand-sm navbar-dark d-flex justify-content-center align-items-center">
                     <ul class="navbar-nav navbar-dark style='cursor:pointer'; ">
 
-                        <!-- 상단 바 전표입력 -->
+<%--                        <!-- 상단 바 전표입력 -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white Permission"
                                data-toggle="dropdown" href="#">전표입력</a>
@@ -399,7 +399,7 @@
                                 <a id="ME002_3" class="dropdown-item registerCustomer" href="#">거래처 관리</a>
                                 <a id="ME002_4" class="dropdown-item registerExport" href="#">계정과목 및 적요</a>
                             </div>
-                        </li>
+                        </li>--%>
                         <c:if test="${sessionScope.empName!=null}">
                             <!-- Nav Item - Messages -->
                             <li class="nav-item dropdown no-arrow mx-1">

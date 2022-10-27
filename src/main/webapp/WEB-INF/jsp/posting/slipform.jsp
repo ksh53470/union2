@@ -113,6 +113,11 @@
                     searchCode();
                 }
             })
+            $('.close').on('click', function(e){
+                $("#accountGridModal").modal('hide');
+                $("#customerCodeModalGrid").modal('hide');
+                $("#codeModal").modal('hide');
+            });
             /* DatePicker  */
             $('#from').val(today.substring(0, 8) + '01');//오늘날짜에서 맨뒤 두자리인 날짜는 01로 지정되도록 값을 세팅함, 초기값을 주는 형식, 날짜는 무조건 해당 달의 1일로 나타나게해둠
             $('#to').val(today.substring(0, 10));         // 오늘 날짜의 년-월-일, 마찬가지로 초기값을 주는거임
@@ -361,7 +366,7 @@
                 alert("전표 작성중이 아닙니다.\n현재상태 : " + selectedSlipRow['slipStatus']);
             } else {
 
-  /*              if (confirmDelete()) {
+                if (confirmDelete()) {
                     $.ajax({
                         type: "GET",
                         url : "${pageContext.request.contextPath}/posting/slipremoval",
@@ -384,7 +389,7 @@
 
                         }
                     });
-                }*/
+                }
                 enableElement({
                     "#addSlip"      : true,
                     "#deleteSlip"   : false,
@@ -1449,6 +1454,7 @@
             console.log(totalRow);
             console.log("합계산 끝")
         }
+
 
         // 거래처 그리드 생성
 

@@ -143,6 +143,9 @@ public class BusinessServiceImpl implements BusinessService {
             journalBean.setJournalNo(journalNo);
             journalDAO.insertJournal(journalBean);
 
+            System.out.println("journalBean :" +journalBean);
+
+
             if (journalBean.getJournalDetailList() != null)
                 for (JournalDetailBean journalDetailBean : journalBean.getJournalDetailList()) { //분개상세항목들
                     journalDetailBean.setJournalNo(journalNo); //분개번호
