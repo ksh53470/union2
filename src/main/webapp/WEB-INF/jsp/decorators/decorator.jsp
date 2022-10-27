@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<%--<head>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script> <!-- jquery를 사용하겠다 라고 선언하는 것  -->
     <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script> <!-- aggrid를 사용하겠다 라고 선언하는 것 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script> <!-- sweetalert를 사용하겠다 라고 선언하는 것, 아래 Swal.fire()메서드를 사용하기 위해서 필요함 -->
@@ -46,6 +46,61 @@
             href="${pageContext.request.contextPath}/assets/css/sb-admin-2.min.css"
             rel="stylesheet">
     <sitemesh:write property='head' /> <!-- url 요청한 페이지의 head 내용을 가져와서 쓰겠다고 선언하는 것, head에 있는 내용 다 가져다 쓸 수 있는듯, 확인해보자, 어떻게? -->
+</head>--%>
+
+<head>
+    <%--    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>--%>
+    <%--    <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script>--%>
+    <%--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>--%>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title><sitemesh:write property='title'/> - 73th Accounting</title>
+
+    <%--    <!-- Custom fonts for this template-->--%>
+    <%--    <link--%>
+    <%--            href="${pageContext.request.contextPath}/assets/vendor/fontawesome-free/css/all.min.css"--%>
+    <%--            rel="stylesheet" type="text/css">--%>
+    <%--    <link--%>
+    <%--            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"--%>
+    <%--            rel="stylesheet">--%>
+
+    <%--    <!-- Custom styles for this template-->--%>
+    <%--    <link--%>
+    <%--            href="${pageContext.request.contextPath}/assets/css/sb-admin-2.min.css"--%>
+    <%--            rel="stylesheet">--%>
+
+
+
+    <%--  jQuery  --%>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <%--  BootStrap  --%>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <%--  SweetAlert  --%>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <%--  AG-Grid  --%>
+    <%--    <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@24.1.0/dist/ag-grid-enterprise.min.js"></script>--%>
+    <!-- Include the JS for AG Grid -->
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <!-- Include the core CSS, this is needed by the grid -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/styles/ag-grid.css"/>
+    <!-- Include the theme CSS, only need to import the theme you are going to use -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/styles/ag-theme-alpine.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+    <%--  Fontawsome  --%>
+    <link href="${pageContext.request.contextPath}/assets/fontawesome-free-6.2.0-web/css/all.css" rel="stylesheet" type="text/css">
+    <%--    <link href="${pageContext.request.contextPath}/assets/sb-admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">--%>
+    <%--  download-template  --%>
+    <link href="${pageContext.request.contextPath}/assets/sb-admin/css/sb-admin-2.min.css" rel="stylesheet">
+    <%--  Google Fonts  --%>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <sitemesh:write property='head' />
 </head>
 
 <body id="page-top"> <!-- body에 id값 줌 -->
@@ -485,6 +540,17 @@
 
 
 <%-- <% ArrayList<String> menuList = (ArrayList<String>) session.getAttribute("menuList");%> --%>
+
+<%--  download-template  --%>
+<%-- 헤드태그에 두면 인식을 못함 --%>
+<script src="${pageContext.request.contextPath}/assets/sb-admin/vendor/jquery/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/sb-admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<%-- easing이 무조건 sb-admin 위에 와야한다. 밑에 있으면 에러가 무한반복으로 잡히게 된다. --%>
+<script src="${pageContext.request.contextPath}/assets/sb-admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/sb-admin/js/sb-admin-2.min.js"></script>
+
+
+
 
 <script>
     // 로그인폼에서 로그인 하는 동시 menulist를 포함한 여러가지(loginForm 참조할것)를 전부 session.setAttribute로 세션에 등록해둠.
